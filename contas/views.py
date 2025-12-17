@@ -134,3 +134,7 @@ def usuario_delete(request, pk):
     return render(request, 'usuarios/usuario_confirm_delete.html', {
         'user': user
     })
+
+
+#####
+
