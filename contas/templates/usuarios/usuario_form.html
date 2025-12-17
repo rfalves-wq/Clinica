@@ -1,0 +1,20 @@
+{% load widget_tweaks %}
+<div class="card p-4">
+    <h3>{{ titulo }}</h3>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ form.username|add_class:"form-control mb-2" | attr:"placeholder:Usuário" }}
+        {{ form.first_name|add_class:"form-control mb-2" | attr:"placeholder:Nome" }}
+        {{ form.last_name|add_class:"form-control mb-2" | attr:"placeholder:Sobrenome" }}
+        {{ form.email|add_class:"form-control mb-2" | attr:"placeholder:E-mail" }}
+
+        {% if form.password %}
+            {{ form.password|add_class:"form-control mb-2" | attr:"placeholder:Senha" }}
+            {{ form.confirm_password|add_class:"form-control mb-3" | attr:"placeholder:Confirmar Senha" }}
+        {% endif %}
+
+        <button class="btn btn-danger w-100">Salvar</button>
+    </form>
+</div>

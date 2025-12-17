@@ -85,8 +85,9 @@ body {
 <div class="sidebar">
     <h4 class="text-center mb-4">PT Saúde</h4>
     <a href="#"><i class="bi bi-house-fill"></i>Home</a>
-    <a href="#"><i class="bi bi-person-plus-fill"></i>Cadastrar Usuário</a>
-    <a href="#"><i class="bi bi-people-fill"></i>Lista de Usuários</a>
+    <a href="{% url 'usuario_create' %}">Cadastrar Usuário</a>
+<a href="{% url 'usuario_list' %}">Lista de Usuários</a>
+
     <a href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i>Sair</a>
 </div>
 

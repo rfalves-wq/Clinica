@@ -1,0 +1,9 @@
+<h3>Excluir Usuário</h3>
+
+<p>Tem certeza que deseja excluir o usuário <strong>{{ user.username }}</strong>?</p>
+
+<form method="POST">
+    {% csrf_token %}
+    <button class="btn btn-danger">Sim, excluir</button>
+    <a href="{% url 'usuario_list' %}" class="btn btn-secondary">Cancelar</a>
+</form>

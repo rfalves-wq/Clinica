@@ -28,3 +28,29 @@ class SimplePasswordResetForm(forms.Form):
         if not User.objects.filter(username=username).exists():
             raise forms.ValidationError("Usuário não encontrado")
         return username
+
+
+
+from django import forms
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+
+class UsuarioCreateForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput, label='Senha')
+    confirm_password = forms.CharField(widget=forms.PasswordInput, label='Confirmar Senha')
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get('password') != cleaned_data.get('confirm_password'):
+            raise ValidationError('As senhas não coincidem.')
+        return cleaned_data
+
+
+class UsuarioUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email']
