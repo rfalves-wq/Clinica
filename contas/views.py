@@ -84,31 +84,42 @@ def usuario_create(request):
 
 
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+
 @login_required
 def usuario_list(request):
-    usuarios = User.objects.all().order_by('username')
+    usuarios = User.objects.select_related('profile').all()
     return render(request, 'usuarios/usuario_list.html', {
         'usuarios': usuarios
     })
 
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.models import User
+from django.contrib import messages
+from .forms import UsuarioUpdateForm
+from django.contrib.auth.decorators import login_required
 
 @login_required
 def usuario_update(request, pk):
     user = get_object_or_404(User, pk=pk)
 
     if request.method == 'POST':
-        form = UsuarioUpdateForm(request.POST, instance=user)
+        form = UsuarioUpdateForm(request.POST, instance=user, user=user)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Usuário atualizado com sucesso!')
+            messages.success(request, 'Usuário atualizado com sucesso.')
             return redirect('usuario_list')
     else:
-        form = UsuarioUpdateForm(instance=user)
+        form = UsuarioUpdateForm(instance=user, user=user)
 
     return render(request, 'usuarios/usuario_form.html', {
         'form': form,
         'titulo': 'Editar Usuário'
     })
+
 
 
 @login_required

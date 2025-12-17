@@ -63,7 +63,30 @@ class UsuarioCreateForm(forms.ModelForm):
 
 
 
+from django import forms
+from django.contrib.auth.models import User
+from contas.models import UserProfile
+
 class UsuarioUpdateForm(forms.ModelForm):
+    cpf = forms.CharField(label='CPF')
+
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email']
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+        if self.user:
+            profile, _ = UserProfile.objects.get_or_create(user=self.user)
+            self.fields['cpf'].initial = profile.cpf
+
+    def save(self, commit=True):
+        user = super().save(commit)
+
+        profile, _ = UserProfile.objects.get_or_create(user=user)
+        profile.cpf = self.cleaned_data['cpf']
+        profile.save()
+
+        return user
