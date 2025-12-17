@@ -54,7 +54,11 @@ def home(request):
     return render(request, 'home.html')
 
 
-@login_required
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import UsuarioCreateForm
+from .models import UserProfile
+
 def usuario_create(request):
     if request.method == 'POST':
         form = UsuarioCreateForm(request.POST)
@@ -62,8 +66,14 @@ def usuario_create(request):
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
             user.save()
-            messages.success(request, 'Usuário cadastrado com sucesso!')
-            return redirect('usuario_list')
+
+            UserProfile.objects.create(
+                user=user,
+                cpf=form.cleaned_data['cpf']
+            )
+
+            messages.success(request, 'Usuário cadastrado com sucesso.')
+            return redirect('home')
     else:
         form = UsuarioCreateForm()
 
@@ -71,6 +81,7 @@ def usuario_create(request):
         'form': form,
         'titulo': 'Cadastrar Usuário'
     })
+
 
 
 @login_required

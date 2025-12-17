@@ -35,9 +35,15 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
+from django import forms
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from .models import UserProfile
+
 class UsuarioCreateForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput, label='Senha')
-    confirm_password = forms.CharField(widget=forms.PasswordInput, label='Confirmar Senha')
+    cpf = forms.CharField(label='CPF')
+    password = forms.CharField(widget=forms.PasswordInput)
+    confirm_password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
         model = User
@@ -48,6 +54,13 @@ class UsuarioCreateForm(forms.ModelForm):
         if cleaned_data.get('password') != cleaned_data.get('confirm_password'):
             raise ValidationError('As senhas não coincidem.')
         return cleaned_data
+
+    def clean_cpf(self):
+        cpf = self.cleaned_data['cpf']
+        if UserProfile.objects.filter(cpf=cpf).exists():
+            raise ValidationError('CPF já cadastrado.')
+        return cpf
+
 
 
 class UsuarioUpdateForm(forms.ModelForm):
