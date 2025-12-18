@@ -177,3 +177,21 @@ def usuario_delete(request, pk):
     return render(request, 'usuarios/usuario_confirm_delete.html', {
         'user': user
     })
+
+
+from django.contrib.auth.models import User
+from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def usuario_toggle_status(request, user_id):
+    usuario = get_object_or_404(User, id=user_id)
+
+    # impede desativar o próprio usuário (opcional, mas recomendado)
+    if usuario == request.user:
+        return redirect('usuario_list')
+
+    usuario.is_active = not usuario.is_active
+    usuario.save()
+
+    return redirect('usuario_list')

@@ -14,5 +14,6 @@ urlpatterns = [
     path('usuarios/excluir/<int:pk>/', views.usuario_delete, name='usuario_delete'),
     path('trocar-senha/', views.trocar_senha_por_cpf, name='trocar_senha_por_cpf'),
     path("resetar-senha/", views.resetar_senha_por_cpf, name="resetar_senha"),
+    path('usuarios/status/<int:user_id>/', views.usuario_toggle_status, name='usuario_toggle_status'),
     
 ]
