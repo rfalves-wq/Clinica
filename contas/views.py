@@ -203,3 +203,57 @@ def trocar_senha_por_cpf(request):
         return redirect('login')
 
     return render(request, 'contas/trocar_senha.html')
+
+
+
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from contas.models import UserProfile
+
+def resetar_senha_por_cpf(request):
+    if request.method == "POST":
+        cpf = request.POST.get("cpf")
+        senha = request.POST.get("senha")
+
+        try:
+            profile = UserProfile.objects.get(cpf=cpf)
+            user = profile.user
+
+            user.set_password(senha)
+            user.save()
+
+            messages.success(request, "Senha alterada com sucesso. Faça login.")
+            return redirect("login")
+
+        except UserProfile.DoesNotExist:
+            messages.error(request, "CPF não encontrado.")
+
+    return render(request, "contas/resetar_senha.html")
+
+
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from contas.forms import ResetSenhaPorCPFForm
+from contas.models import UserProfile
+
+def resetar_senha_por_cpf(request):
+    if request.method == "POST":
+        form = ResetSenhaPorCPFForm(request.POST)
+        if form.is_valid():
+            cpf = form.cleaned_data["cpf"]
+            senha = form.cleaned_data["new_password"]
+
+            profile = UserProfile.objects.get(cpf=cpf)
+            user = profile.user
+
+            user.set_password(senha)
+            user.save()
+
+            messages.success(request, "Senha redefinida com sucesso.")
+            return redirect("login")
+    else:
+        form = ResetSenhaPorCPFForm()
+
+    return render(request, "contas/resetar_senha.html", {
+        "form": form
+    })

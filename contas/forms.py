@@ -156,3 +156,30 @@ def validar_cpf(cpf):
     dig2 = 0 if dig2 == 10 else dig2
 
     return cpf[-2:] == f"{dig1}{dig2}"
+
+
+from django import forms
+from contas.models import UserProfile
+
+class ResetSenhaPorCPFForm(forms.Form):
+    cpf = forms.CharField(label="CPF", max_length=14)
+    new_password = forms.CharField(
+        label="Nova senha",
+        widget=forms.PasswordInput
+    )
+    confirm_password = forms.CharField(
+        label="Confirmar senha",
+        widget=forms.PasswordInput
+    )
+
+    def clean(self):
+        cleaned = super().clean()
+        if cleaned.get("new_password") != cleaned.get("confirm_password"):
+            raise forms.ValidationError("As senhas não coincidem")
+        return cleaned
+
+    def clean_cpf(self):
+        cpf = self.cleaned_data["cpf"]
+        if not UserProfile.objects.filter(cpf=cpf).exists():
+            raise forms.ValidationError("CPF não encontrado")
+        return cpf
