@@ -28,14 +28,19 @@
 
                         <!-- Usuário e CPF -->
                         <div class="row">
-                            <div class="col-md-12 mb-3">
+                            <div class="col-md-6 mb-3">
                                 <label class="form-label">Usuário</label>
                                 {{ form.username|add_class:"form-control" | attr:"placeholder:Ex: clinica01" }}
-                                {{ form.cpf|add_class:"form-control mb-3" | attr:"placeholder:CPF" }}
+                                
 
                             </div>
 
-                            
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">CPF</label>
+                                
+                                {{ form.cpf|add_class:"form-control"|attr:"placeholder:000.000.000-00"|attr:"maxlength:14"|attr:"id:cpf" }}
+
+                            </div>
                         </div>
 
                         <!-- Nome e Sobrenome -->
@@ -96,3 +101,25 @@
 
 </body>
 </html>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const cpfInput = document.getElementById("cpf");
+
+    if (cpfInput) {
+        cpfInput.addEventListener("input", function () {
+            let value = cpfInput.value.replace(/\D/g, "");
+
+            if (value.length > 11) {
+                value = value.slice(0, 11);
+            }
+
+            value = value.replace(/(\d{3})(\d)/, "$1.$2");
+            value = value.replace(/(\d{3})(\d)/, "$1.$2");
+            value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+
+            cpfInput.value = value;
+        });
+    }
+});
+</script>

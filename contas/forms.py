@@ -93,3 +93,6 @@ class UsuarioUpdateForm(forms.ModelForm):
 
 
 #####################
+def clean_cpf(self):
+    cpf = self.cleaned_data['cpf']
+    return cpf.replace('.', '').replace('-', '')
