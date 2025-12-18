@@ -1,0 +1,16 @@
+<form method="post">
+    {% csrf_token %}
+
+    <label>CPF</label>
+    <input type="text" name="cpf" class="form-control" required>
+
+    <label class="mt-2">Nova senha</label>
+    <input type="password" name="senha" class="form-control" required>
+
+    <label class="mt-2">Confirmar senha</label>
+    <input type="password" name="confirmar" class="form-control" required>
+
+    <button class="btn btn-danger mt-3 w-100">
+        Trocar senha
+    </button>
+</form>

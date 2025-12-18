@@ -138,3 +138,35 @@ def usuario_delete(request, pk):
 
 #####
 
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
+@login_required
+def trocar_senha_por_cpf(request):
+    user = request.user
+
+    # segurança extra
+    if not hasattr(user, 'profile'):
+        messages.error(request, 'CPF não cadastrado.')
+        return redirect('home')
+
+    if request.method == 'POST':
+        cpf = request.POST.get('cpf')
+        senha = request.POST.get('senha')
+        confirmar = request.POST.get('confirmar')
+
+        if senha != confirmar:
+            messages.error(request, 'As senhas não coincidem.')
+            return redirect('trocar_senha_por_cpf')
+
+        if cpf != user.profile.cpf:
+            messages.error(request, 'CPF inválido.')
+            return redirect('trocar_senha_por_cpf')
+
+        user.set_password(senha)
+        user.save()
+
+        messages.success(request, 'Senha alterada com sucesso. Faça login novamente.')
+        return redirect('login')
+
+    return render(request, 'contas/trocar_senha.html')
