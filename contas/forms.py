@@ -93,6 +93,66 @@ class UsuarioUpdateForm(forms.ModelForm):
 
 
 #####################
-def clean_cpf(self):
-    cpf = self.cleaned_data['cpf']
-    return cpf.replace('.', '').replace('-', '')
+from django import forms
+from django.contrib.auth.models import User
+from contas.models import UserProfile
+from contas.utils import validar_cpf
+
+class UsuarioCreateForm(forms.ModelForm):
+    cpf = forms.CharField(label='CPF')
+    password = forms.CharField(widget=forms.PasswordInput)
+    confirm_password = forms.CharField(widget=forms.PasswordInput)
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email']
+
+    def clean_cpf(self):
+        cpf = self.cleaned_data.get('cpf')
+
+        # valida formato e dígitos
+        if not validar_cpf(cpf):
+            raise forms.ValidationError("CPF inválido.")
+
+        # impede CPF duplicado
+        if UserProfile.objects.filter(cpf=cpf).exists():
+            raise forms.ValidationError("Este CPF já está cadastrado.")
+
+        return cpf
+
+    def clean(self):
+        cleaned = super().clean()
+        if cleaned.get('password') != cleaned.get('confirm_password'):
+            raise forms.ValidationError("As senhas não coincidem.")
+        return cleaned
+
+
+
+
+
+import re
+from django import forms
+from django.core.exceptions import ValidationError
+from contas.models import UserProfile
+
+
+def validar_cpf(cpf):
+    cpf = re.sub(r'\D', '', cpf)
+
+    if len(cpf) != 11:
+        return False
+
+    if cpf == cpf[0] * 11:
+        return False
+
+    # Primeiro dígito
+    soma = sum(int(cpf[i]) * (10 - i) for i in range(9))
+    dig1 = (soma * 10) % 11
+    dig1 = 0 if dig1 == 10 else dig1
+
+    # Segundo dígito
+    soma = sum(int(cpf[i]) * (11 - i) for i in range(10))
+    dig2 = (soma * 10) % 11
+    dig2 = 0 if dig2 == 10 else dig2
+
+    return cpf[-2:] == f"{dig1}{dig2}"

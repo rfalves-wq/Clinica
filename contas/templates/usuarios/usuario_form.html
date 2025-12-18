@@ -25,6 +25,13 @@
                 <div class="card-body p-4">
                     <form method="POST">
                         {% csrf_token %}
+                                {% if form.non_field_errors %}
+<div class="alert alert-danger">
+    {% for error in form.non_field_errors %}
+        {{ error }}
+    {% endfor %}
+</div>
+{% endif %}
 
                         <!-- Usuário e CPF -->
                         <div class="row">
@@ -36,11 +43,20 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label class="form-label">CPF</label>
-                                
-                                {{ form.cpf|add_class:"form-control"|attr:"placeholder:000.000.000-00"|attr:"maxlength:14"|attr:"id:cpf" }}
+    <label class="form-label">CPF</label>
 
-                            </div>
+    {{ form.cpf|add_class:"form-control"|attr:"id:cpf" }}
+
+    {% if form.cpf.errors %}
+        <div class="text-danger small mt-1">
+            {% for error in form.cpf.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+
                         </div>
 
                         <!-- Nome e Sobrenome -->
@@ -49,7 +65,7 @@
                                 <label class="form-label">Nome</label>
                                 {{ form.first_name|add_class:"form-control" | attr:"placeholder:Nome" }}
                             </div>
-
+                                
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Sobrenome</label>
                                 {{ form.last_name|add_class:"form-control" | attr:"placeholder:Sobrenome" }}
