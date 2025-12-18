@@ -89,26 +89,41 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 
-@login_required
+from django.core.paginator import Paginator
+from django.db.models import Q
+
+import re
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.contrib.auth.models import User
+
 def usuario_list(request):
-    termo = request.GET.get('q', '')
+    termo = request.GET.get('q', '').strip()
 
     usuarios_qs = User.objects.select_related('profile').order_by('username')
 
     if termo:
+        termo_numeros = re.sub(r'\D', '', termo)
+
         usuarios_qs = usuarios_qs.filter(
             Q(username__icontains=termo) |
-            Q(profile__cpf__icontains=termo.replace('.', '').replace('-', ''))
+            Q(profile__cpf__icontains=termo) |
+            Q(profile__cpf__icontains=termo_numeros)
         )
 
-    paginator = Paginator(usuarios_qs, 20)
+    paginator = Paginator(usuarios_qs, 5)
     page_number = request.GET.get('page')
     usuarios = paginator.get_page(page_number)
 
-    return render(request, 'usuarios/usuario_list.html', {
+    context = {
         'usuarios': usuarios,
-        'termo': termo
-    })
+        'termo': termo,
+        'total_usuarios': usuarios_qs.count(),
+    }
+
+    return render(request, 'usuarios/usuario_list.html', context)
+
+
 
 
 
