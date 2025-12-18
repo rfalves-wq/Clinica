@@ -43,6 +43,21 @@ body {
             <i class="bi bi-person-plus-fill me-1"></i> Novo Usuário
         </a>
     </div>
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-10">
+        <input type="text"
+               name="q"
+               value="{{ termo }}"
+               class="form-control"
+               placeholder="Buscar por usuário ou CPF">
+    </div>
+
+    <div class="col-md-2 d-grid">
+        <button class="btn btn-danger">
+            <i class="bi bi-search"></i> Buscar
+        </button>
+    </div>
+</form>
 
     <!-- CARD -->
     <div class="card shadow-sm border-0 rounded-4">

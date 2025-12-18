@@ -87,12 +87,28 @@ def usuario_create(request):
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
+from django.contrib.auth.models import User
+from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+
 @login_required
 def usuario_list(request):
-    usuarios = User.objects.select_related('profile').all()
-    return render(request, 'usuarios/usuario_list.html', {
-        'usuarios': usuarios
-    })
+    termo = request.GET.get('q', '')
+
+    usuarios = User.objects.select_related('profile')
+
+    if termo:
+        usuarios = usuarios.filter(
+            Q(username__icontains=termo) |
+            Q(profile__cpf__icontains=termo.replace('.', '').replace('-', ''))
+        )
+
+    context = {
+        'usuarios': usuarios,
+        'termo': termo
+    }
+
+    return render(request, 'usuarios/usuario_list.html', context)
 
 
 
