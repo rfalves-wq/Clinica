@@ -84,10 +84,8 @@ def usuario_create(request):
 
 
 
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-
-from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 
@@ -95,20 +93,24 @@ from django.contrib.auth.decorators import login_required
 def usuario_list(request):
     termo = request.GET.get('q', '')
 
-    usuarios = User.objects.select_related('profile')
+    usuarios_qs = User.objects.select_related('profile').order_by('username')
 
     if termo:
-        usuarios = usuarios.filter(
+        usuarios_qs = usuarios_qs.filter(
             Q(username__icontains=termo) |
             Q(profile__cpf__icontains=termo.replace('.', '').replace('-', ''))
         )
 
-    context = {
+    paginator = Paginator(usuarios_qs, 20)
+    page_number = request.GET.get('page')
+    usuarios = paginator.get_page(page_number)
+
+    return render(request, 'usuarios/usuario_list.html', {
         'usuarios': usuarios,
         'termo': termo
-    }
+    })
 
-    return render(request, 'usuarios/usuario_list.html', context)
+
 
 
 

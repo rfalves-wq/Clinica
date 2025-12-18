@@ -109,6 +109,58 @@ body {
                         {% endfor %}
                     </tbody>
                 </table>
+                {% if usuarios.has_other_pages %}
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+
+        <!-- Anterior -->
+        {% if usuarios.has_previous %}
+        <li class="page-item">
+            <a class="page-link"
+               href="?q={{ termo }}&page={{ usuarios.previous_page_number }}">
+                Anterior
+            </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <span class="page-link">Anterior</span>
+        </li>
+        {% endif %}
+
+        <!-- Números -->
+        {% for num in usuarios.paginator.page_range %}
+            {% if usuarios.number == num %}
+            <li class="page-item active">
+                <span class="page-link">{{ num }}</span>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link"
+                   href="?q={{ termo }}&page={{ num }}">
+                    {{ num }}
+                </a>
+            </li>
+            {% endif %}
+        {% endfor %}
+
+        <!-- Próxima -->
+        {% if usuarios.has_next %}
+        <li class="page-item">
+            <a class="page-link"
+               href="?q={{ termo }}&page={{ usuarios.next_page_number }}">
+                Próxima
+            </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <span class="page-link">Próxima</span>
+        </li>
+        {% endif %}
+
+    </ul>
+</nav>
+{% endif %}
+
             </div>
             {% else %}
                 <div class="text-center text-muted py-5">
