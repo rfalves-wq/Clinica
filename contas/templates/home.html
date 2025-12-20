@@ -4,12 +4,10 @@
 <meta charset="UTF-8">
 <title>Home - PT Saúde</title>
 
-<!-- Bootstrap -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
-/* ================= BASE ================= */
 :root {
     --primary: #e31b23;
     --primary-dark: #b71c1c;
@@ -21,35 +19,22 @@
 body {
     margin: 0;
     font-family: 'Segoe UI', Arial, sans-serif;
-    background-color: var(--bg-light);
-    transition: background 0.3s ease, color 0.3s ease;
+    background: var(--bg-light);
 }
 
-/* ================= SIDEBAR ================= */
+/* SIDEBAR */
 .sidebar {
     width: 230px;
     height: 100vh;
     background: linear-gradient(180deg, var(--primary), #c4161d);
     position: fixed;
-    top: 0;
-    left: 0;
     padding-top: 1.5rem;
-    box-shadow: 4px 0 12px rgba(0,0,0,0.1);
-    transition: background 0.3s;
 }
 
-.sidebar h4 {
+.sidebar h4,
+.sidebar small {
     color: #fff;
     text-align: center;
-    margin-bottom: 0.5rem;
-    font-weight: 700;
-}
-
-.sidebar small {
-    display: block;
-    text-align: center;
-    color: rgba(255,255,255,0.8);
-    margin-bottom: 1rem;
 }
 
 .sidebar a {
@@ -58,13 +43,10 @@ body {
     display: flex;
     align-items: center;
     text-decoration: none;
-    transition: background 0.25s, padding-left 0.25s;
+    transition: all .2s;
 }
 
-.sidebar a i {
-    margin-right: 0.6rem;
-}
-
+.sidebar a.active,
 .sidebar a:hover {
     background-color: var(--primary-dark);
     padding-left: 1.6rem;
@@ -76,85 +58,56 @@ body {
     background-color: rgba(255,255,255,0.08);
 }
 
-.sidebar .submenu a:hover {
-    background-color: rgba(0,0,0,0.2);
-}
-
-/* ================= MAIN ================= */
+/* MAIN */
 .main-content {
     margin-left: 230px;
-    padding: 2.5rem;
-    animation: fadeUp 0.5s ease;
+    min-height: 100vh;
 }
 
-@keyframes fadeUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+/* HEADER */
+.header {
+    background: #fff;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #ddd;
 }
 
-/* ================= CARDS ================= */
-.card {
-    transition: transform 0.25s, box-shadow 0.25s;
+.user-box {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
 }
 
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+.avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* ================= DARK MODE ================= */
+/* CONTENT */
+.content {
+    padding: 2rem;
+}
+
+/* DARK MODE */
 body.dark-mode {
-    background-color: var(--bg-dark);
+    background: var(--bg-dark);
+    color: #eaeaea;
+}
+
+body.dark-mode .header,
+body.dark-mode .card {
+    background: var(--card-dark);
     color: #eaeaea;
 }
 
 body.dark-mode .sidebar {
     background: linear-gradient(180deg, #1f1f1f, #141414);
-}
-
-body.dark-mode .sidebar a:hover {
-    background-color: #333;
-}
-
-body.dark-mode .submenu a {
-    background-color: rgba(255,255,255,0.05);
-}
-
-body.dark-mode .main-content {
-    background-color: var(--bg-dark);
-}
-
-body.dark-mode .card {
-    background-color: var(--card-dark);
-    color: #eaeaea;
-}
-
-body.dark-mode .text-muted {
-    color: #b0b0b0 !important;
-}
-
-body.dark-mode hr {
-    border-color: #444;
-}
-
-/* ================= DARK BUTTON ================= */
-.toggle-dark {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1rem;
-}
-
-.toggle-dark button {
-    border: none;
-    background: #fff;
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    transition: background 0.3s, transform 0.2s;
-}
-
-.toggle-dark button:hover {
-    transform: scale(1.1);
 }
 </style>
 </head>
@@ -166,61 +119,96 @@ body.dark-mode hr {
     <h4>PT Saúde</h4>
     <small>Sistema Clínico</small>
 
-    <!-- DARK MODE -->
-    <div class="toggle-dark">
-        <button id="toggleDark" title="Alternar tema">
+    <div class="text-center my-3">
+        <button id="toggleDark" class="btn btn-light btn-sm rounded-circle">
             <i class="bi bi-moon-fill"></i>
         </button>
     </div>
 
-    <a href="{% url 'home' %}">
-        <i class="bi bi-house-fill"></i> Home
+    <a href="{% url 'home' %}" class="active">
+        <i class="bi bi-house-fill me-2"></i> Home
     </a>
 
     <a href="{% url 'trocar_senha_por_cpf' %}">
-        <i class="bi bi-key-fill"></i> Trocar senha
+        <i class="bi bi-key-fill me-2"></i> Trocar senha
     </a>
 
     <a data-bs-toggle="collapse" href="#menuCadastrar">
-        <i class="bi bi-plus-circle-fill"></i> Cadastrar
+        <i class="bi bi-plus-circle-fill me-2"></i> Cadastrar
         <i class="bi bi-chevron-down ms-auto"></i>
     </a>
 
     <div class="collapse submenu" id="menuCadastrar">
         <a href="{% url 'usuario_create' %}">
-            <i class="bi bi-person-plus-fill"></i> Usuário
+            <i class="bi bi-person-plus-fill me-2"></i> Usuário
         </a>
     </div>
 
     <a data-bs-toggle="collapse" href="#menuListar">
-        <i class="bi bi-list-ul"></i> Listas
+        <i class="bi bi-list-ul me-2"></i> Listas
         <i class="bi bi-chevron-down ms-auto"></i>
     </a>
 
     <div class="collapse submenu" id="menuListar">
         <a href="{% url 'usuario_list' %}">
-            <i class="bi bi-people-fill"></i> Usuários
+            <i class="bi bi-people-fill me-2"></i> Usuários
         </a>
     </div>
 
     <hr class="text-white mx-3">
 
     <a href="{% url 'logout' %}">
-        <i class="bi bi-box-arrow-right"></i> Sair
+        <i class="bi bi-box-arrow-right me-2"></i> Sair
     </a>
 </div>
 
-<!-- CONTEÚDO -->
+<!-- MAIN -->
 <div class="main-content">
-    <h3 class="fw-bold mb-2">Bem-vindo ao PT Saúde</h3>
-    <p class="text-muted mb-4">
-        Gerencie usuários e informações da clínica com segurança.
-    </p>
 
-    <div class="row g-4">
-        <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4">
-                <div class="card-body text-center">
+    <!-- HEADER -->
+    {% if request.user.is_authenticated %}
+    <div class="header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0 fw-bold text-danger">Dashboard</h5>
+
+        <div class="dropdown">
+            <div class="user-box dropdown-toggle" data-bs-toggle="dropdown">
+                <div class="avatar">
+                    {{ request.user.first_name|first|upper }}
+                </div>
+                <div class="text-end">
+                    <div class="fw-semibold">
+                        {{ request.user.get_full_name|default:request.user.username }}
+                    </div>
+                    <small class="text-muted">
+                        {{ request.user.profile.cpf|default:"CPF não informado" }}
+                    </small>
+                </div>
+            </div>
+
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="{% url 'trocar_senha_por_cpf' %}">
+                    <i class="bi bi-key me-2"></i> Alterar senha
+                </a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">
+                    <i class="bi bi-box-arrow-right me-2"></i> Sair
+                </a></li>
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- CONTENT -->
+    <div class="content">
+
+        <h3 class="fw-bold mb-2">Bem-vindo ao PT Saúde</h3>
+        <p class="text-muted mb-4">
+            Gerencie usuários e informações da clínica com segurança.
+        </p>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 rounded-4 text-center p-4">
                     <i class="bi bi-people-fill fs-1 text-danger"></i>
                     <h6 class="mt-3">Usuários</h6>
                     <a href="{% url 'usuario_list' %}" class="btn btn-outline-danger btn-sm mt-2">
@@ -228,11 +216,9 @@ body.dark-mode hr {
                     </a>
                 </div>
             </div>
-        </div>
 
-        <div class="col-md-4">
-            <div class="card shadow-sm border-0 rounded-4">
-                <div class="card-body text-center">
+            <div class="col-md-4">
+                <div class="card shadow-sm border-0 rounded-4 text-center p-4">
                     <i class="bi bi-person-plus-fill fs-1 text-danger"></i>
                     <h6 class="mt-3">Cadastrar Usuário</h6>
                     <a href="{% url 'usuario_create' %}" class="btn btn-outline-danger btn-sm mt-2">
@@ -241,10 +227,10 @@ body.dark-mode hr {
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 
-<!-- JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
@@ -258,9 +244,8 @@ if (localStorage.getItem('darkMode') === 'on') {
 
 toggle.addEventListener('click', () => {
     body.classList.toggle('dark-mode');
-    const dark = body.classList.contains('dark-mode');
-    localStorage.setItem('darkMode', dark ? 'on' : 'off');
-    toggle.innerHTML = dark
+    localStorage.setItem('darkMode', body.classList.contains('dark-mode') ? 'on' : 'off');
+    toggle.innerHTML = body.classList.contains('dark-mode')
         ? '<i class="bi bi-sun-fill"></i>'
         : '<i class="bi bi-moon-fill"></i>';
 });
