@@ -115,3 +115,7 @@ def validar_cpf(cpf):
     dig2 = 0 if dig2 == 10 else dig2
 
     return cpf[-2:] == f"{dig1}{dig2}"
+
+
+
+###################

@@ -195,3 +195,6 @@ def usuario_toggle_status(request, user_id):
     usuario.save()
 
     return redirect('usuario_list')
+
+
+#######

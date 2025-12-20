@@ -2,87 +2,156 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Alterar senha</title>
+<title>Alterar Senha</title>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
-body { background: linear-gradient(135deg, #f4f6f9, #e9ecef); }
-.fade-in { animation: fadeIn 0.6s ease-in-out; }
-@keyframes fadeIn { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
-.criterio { font-size:0.85rem; transition: all 0.3s; }
-.criterio.valid { color:green; font-weight:600; }
-.criterio.invalid { color:red; font-weight:400; }
-.progress { height:10px; border-radius:5px; overflow:hidden; margin-top:5px; }
-.progress-bar { transition: width 0.4s, background-color 0.4s; }
+body {
+    background: linear-gradient(135deg, #f4f6f9, #e9ecef);
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.fade-in {
+    animation: fadeIn .6s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity:0; transform: translateY(20px); }
+    to { opacity:1; transform: translateY(0); }
+}
+
+.criterio {
+    font-size: 0.85rem;
+}
+.criterio.valid {
+    color: #198754;
+    font-weight: 600;
+}
+.criterio.invalid {
+    color: #dc3545;
+}
+
+.progress {
+    height: 8px;
+    border-radius: 5px;
+    overflow: hidden;
+}
 </style>
 </head>
+
 <body>
 
 <div class="container vh-100 d-flex align-items-center justify-content-center">
 <div class="col-md-6 col-lg-4 fade-in">
+
 <div class="card shadow-lg border-0 rounded-4">
-<div class="card-header bg-danger text-white text-center rounded-top-4 py-3">
-<h5 class="mb-0 fw-semibold"><i class="bi bi-shield-lock-fill"></i> Alterar senha</h5>
+<div class="card-header bg-danger text-white text-center py-3 rounded-top-4">
+    <h5 class="mb-0">
+        <i class="bi bi-shield-lock-fill"></i> Alterar Senha
+    </h5>
 </div>
+
 <div class="card-body p-4">
+
 <form method="post" id="formSenha" novalidate>
 {% csrf_token %}
 
+<!-- CPF -->
 <div class="form-floating mb-3">
-<input type="text" class="form-control" id="cpf" name="cpf" placeholder="CPF" required>
-<label for="cpf">CPF</label>
+    <input type="text"
+           class="form-control"
+           id="cpf"
+           name="cpf"
+           placeholder="000.000.000-00"
+           maxlength="14"
+           inputmode="numeric"
+           autocomplete="off"
+           required>
+    <label for="cpf">CPF</label>
 </div>
 
+<!-- SENHA -->
 <div class="form-floating mb-3 position-relative">
-<input type="password" class="form-control" id="senha" name="senha" placeholder="Nova senha" required>
-<label for="senha">Nova senha</label>
-<i class="bi bi-eye-fill position-absolute top-50 end-0 translate-middle-y me-3 text-muted" style="cursor:pointer" onclick="toggleSenha('senha', this)"></i>
+    <input type="password" class="form-control" id="senha" name="senha" placeholder="Nova senha" required>
+    <label for="senha">Nova senha</label>
 
-<div class="progress">
-<div id="senhaForca" class="progress-bar" role="progressbar" style="width:0%;"></div>
+    <i class="bi bi-eye-fill position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+       style="cursor:pointer"
+       onclick="toggleSenha('senha', this)"></i>
+
+    <div class="progress mt-2">
+        <div id="senhaForca" class="progress-bar"></div>
+    </div>
+    <small id="senhaTexto" class="text-muted"></small>
+
+    <ul class="mt-2 list-unstyled">
+        <li id="critLen" class="criterio invalid">❌ Mínimo 8 caracteres</li>
+        <li id="critLower" class="criterio invalid">❌ Letra minúscula</li>
+        <li id="critUpper" class="criterio invalid">❌ Letra maiúscula</li>
+        <li id="critNumber" class="criterio invalid">❌ Número</li>
+        <li id="critSymbol" class="criterio invalid">❌ Símbolo especial</li>
+        <li id="critSeq" class="criterio valid">✅ Sem sequência numérica</li>
+    </ul>
 </div>
-<small id="senhaTexto" class="text-muted mt-1 d-block"></small>
 
-<ul class="mt-2 mb-0 list-unstyled">
-<li id="critLen" class="criterio invalid">❌ Mínimo 8 caracteres</li>
-<li id="critLower" class="criterio invalid">❌ Letra minúscula</li>
-<li id="critUpper" class="criterio invalid">❌ Letra maiúscula</li>
-<li id="critNumber" class="criterio invalid">❌ Número</li>
-<li id="critSymbol" class="criterio invalid">❌ Símbolo especial</li>
-<li id="critSeq" class="criterio valid">✅ Sem sequência numérica</li>
-</ul>
-</div>
-
+<!-- CONFIRMAR -->
 <div class="form-floating mb-4 position-relative">
-<input type="password" class="form-control" id="confirmar" name="confirmar" placeholder="Confirmar senha" required>
-<label for="confirmar">Confirmar senha</label>
-<i class="bi bi-eye-fill position-absolute top-50 end-0 translate-middle-y me-3 text-muted" style="cursor:pointer" onclick="toggleSenha('confirmar', this)"></i>
+    <input type="password" class="form-control" id="confirmar" name="confirmar" placeholder="Confirmar senha" required>
+    <label for="confirmar">Confirmar senha</label>
+
+    <i class="bi bi-eye-fill position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
+       style="cursor:pointer"
+       onclick="toggleSenha('confirmar', this)"></i>
 </div>
 
-<button type="submit" class="btn btn-danger w-100 py-2 fw-semibold">
-<i class="bi bi-check-circle-fill"></i> Salvar nova senha
+<button class="btn btn-danger w-100 fw-semibold py-2">
+    <i class="bi bi-check-circle-fill"></i> Salvar nova senha
 </button>
-<a href="{% url 'usuario_list' %}" class="btn btn-outline-secondary w-100 mt-2">
-<i class="bi bi-arrow-left"></i> Voltar para lista
+
+<a href="{% url 'login' %}" class="btn btn-outline-secondary w-100 mt-2">
+    <i class="bi bi-arrow-left"></i> Voltar
 </a>
+
 </form>
-</div></div></div></div>
+
+</div>
+</div>
+</div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-function toggleSenha(id, icon){
+// MOSTRAR / OCULTAR SENHA
+function toggleSenha(id, icon) {
     const campo = document.getElementById(id);
-    if(campo.type==="password"){ campo.type="text"; icon.classList.replace("bi-eye-fill","bi-eye-slash-fill"); }
-    else{ campo.type="password"; icon.classList.replace("bi-eye-slash-fill","bi-eye-fill"); }
+    if (campo.type === "password") {
+        campo.type = "text";
+        icon.classList.replace("bi-eye-fill", "bi-eye-slash-fill");
+    } else {
+        campo.type = "password";
+        icon.classList.replace("bi-eye-slash-fill", "bi-eye-fill");
+    }
 }
 
+// MÁSCARA CPF
+const cpfInput = document.getElementById('cpf');
+cpfInput.addEventListener('input', function () {
+    let v = cpfInput.value.replace(/\D/g, '');
+    v = v.slice(0, 11);
+    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})(\d)/, '$1.$2');
+    v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    cpfInput.value = v;
+});
+
+// FORÇA DA SENHA
 const senhaInput = document.getElementById('senha');
 const confirmarInput = document.getElementById('confirmar');
-const barraForca = document.getElementById('senhaForca');
-const textoForca = document.getElementById('senhaTexto');
-const form = document.getElementById('formSenha');
+const barra = document.getElementById('senhaForca');
+const texto = document.getElementById('senhaTexto');
 
 const critLen = document.getElementById('critLen');
 const critLower = document.getElementById('critLower');
@@ -91,78 +160,35 @@ const critNumber = document.getElementById('critNumber');
 const critSymbol = document.getElementById('critSymbol');
 const critSeq = document.getElementById('critSeq');
 
-function temSequenciaNumerica(senha){
-    for(let i=0;i<=senha.length-3;i++){
-        const seq = senha.substring(i,i+3);
-        if(/^\d{3,}$/.test(seq)){
-            let numeros = seq.split('').map(Number);
-            if(numeros[1] === numeros[0]+1 && numeros[2] === numeros[1]+1) return true;
-            if(numeros[1] === numeros[0]-1 && numeros[2] === numeros[1]-1) return true;
-        }
-    }
-    return false;
+function temSequencia(s) {
+    return /(012|123|234|345|456|567|678|789|987|876|765|654|543|432|321|210)/.test(s);
 }
 
-senhaInput.addEventListener('input', function(){
-    const senha = senhaInput.value;
-    const hasLen = senha.length>=8;
-    const hasLower = /[a-z]/.test(senha);
-    const hasUpper = /[A-Z]/.test(senha);
-    const hasNumber = /\d/.test(senha);
-    const hasSymbol = /[\W_]/.test(senha);
-    const semSeq = !temSequenciaNumerica(senha);
+senhaInput.addEventListener('input', () => {
+    const s = senhaInput.value;
 
-    let pontos = [hasLen,hasLower,hasUpper,hasNumber,hasSymbol,semSeq].filter(Boolean).length;
-    barraForca.style.width = `${(pontos/6)*100}%`;
-    if(pontos<=2) barraForca.style.backgroundColor="#dc3545";
-    else if(pontos<=4) barraForca.style.backgroundColor="#ffc107";
-    else barraForca.style.backgroundColor="#198754";
+    const regras = {
+        len: s.length >= 8,
+        lower: /[a-z]/.test(s),
+        upper: /[A-Z]/.test(s),
+        num: /\d/.test(s),
+        sym: /[\W_]/.test(s),
+        seq: !temSequencia(s)
+    };
 
-    textoForca.textContent = pontos<3?"Fraca":pontos<5?"Média":"Forte";
+    critLen.className = `criterio ${regras.len ? 'valid':'invalid'}`;
+    critLower.className = `criterio ${regras.lower ? 'valid':'invalid'}`;
+    critUpper.className = `criterio ${regras.upper ? 'valid':'invalid'}`;
+    critNumber.className = `criterio ${regras.num ? 'valid':'invalid'}`;
+    critSymbol.className = `criterio ${regras.sym ? 'valid':'invalid'}`;
+    critSeq.className = `criterio ${regras.seq ? 'valid':'invalid'}`;
 
-    critLen.className = hasLen?'criterio valid':'criterio invalid';
-    critLen.textContent = (hasLen?'✅':'❌')+" Mínimo 8 caracteres";
-
-    critLower.className = hasLower?'criterio valid':'criterio invalid';
-    critLower.textContent = (hasLower?'✅':'❌')+" Letra minúscula";
-
-    critUpper.className = hasUpper?'criterio valid':'criterio invalid';
-    critUpper.textContent = (hasUpper?'✅':'❌')+" Letra maiúscula";
-
-    critNumber.className = hasNumber?'criterio valid':'criterio invalid';
-    critNumber.textContent = (hasNumber?'✅':'❌')+" Número";
-
-    critSymbol.className = hasSymbol?'criterio valid':'criterio invalid';
-    critSymbol.textContent = (hasSymbol?'✅':'❌')+" Símbolo especial";
-
-    critSeq.className = semSeq?'criterio valid':'criterio invalid';
-    critSeq.textContent = semSeq?'✅ Sem sequência numérica':'❌ Sem sequência numérica';
-});
-
-form.addEventListener('submit', function(e){
-    const senha = senhaInput.value;
-    const confirmar = confirmarInput.value;
-    const regexForte = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-
-    if(!regexForte.test(senha)){
-        e.preventDefault();
-        alert("A senha deve ter pelo menos 8 caracteres, incluindo letras maiúsculas, minúsculas, números e símbolos.");
-        senhaInput.focus();
-        return false;
-    }
-    if(temSequenciaNumerica(senha)){
-        e.preventDefault();
-        alert("A senha não pode conter sequências numéricas como 123 ou 987.");
-        senhaInput.focus();
-        return false;
-    }
-    if(senha !== confirmar){
-        e.preventDefault();
-        alert("A confirmação da senha não coincide.");
-        confirmarInput.focus();
-        return false;
-    }
+    const pontos = Object.values(regras).filter(Boolean).length;
+    barra.style.width = `${(pontos/6)*100}%`;
+    barra.className = `progress-bar ${pontos<3?'bg-danger':pontos<5?'bg-warning':'bg-success'}`;
+    texto.textContent = pontos<3?'Senha fraca':pontos<5?'Senha média':'Senha forte';
 });
 </script>
+
 </body>
 </html>
