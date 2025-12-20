@@ -23,9 +23,16 @@ def login_view(request):
     if request.method == 'POST':
         form = LoginForm(request, data=request.POST)
         if form.is_valid():
-            login(request, form.get_user())
+            user = form.get_user()
+            login(request, user)
+
+            # 👇 VERIFICA SE PRECISA TROCAR SENHA
+            if hasattr(user, 'profile') and user.profile.trocar_senha:
+                return redirect('trocar_senha_por_cpf')
+
             return redirect('home')
-        messages.error(request, "Usuário ou senha inválidos")
+        else:
+            messages.error(request, "Usuário ou senha inválidos")
     else:
         form = LoginForm()
 
@@ -124,10 +131,6 @@ def simple_password_reset(request):
 def trocar_senha_por_cpf(request):
     user = request.user
 
-    if not hasattr(user, 'profile'):
-        messages.error(request, 'CPF não cadastrado.')
-        return redirect('home')
-
     if request.method == 'POST':
         cpf = request.POST.get('cpf')
         senha = request.POST.get('senha')
@@ -143,10 +146,16 @@ def trocar_senha_por_cpf(request):
 
         user.set_password(senha)
         user.save()
-        messages.success(request, 'Senha alterada. Faça login novamente.')
+
+        # 👇 MARCA COMO SENHA DEFINITIVA
+        user.profile.trocar_senha = False
+        user.profile.save()
+
+        messages.success(request, 'Senha alterada com sucesso. Faça login novamente.')
         return redirect('login')
 
     return render(request, 'contas/trocar_senha.html')
+
 
 def resetar_senha_por_cpf(request):
     if request.method == "POST":
@@ -198,3 +207,9 @@ def usuario_toggle_status(request, user_id):
 
 
 #######
+from contas.decorators import senha_definida_required
+
+@login_required
+@senha_definida_required
+def home(request):
+    return render(request, 'home.html')

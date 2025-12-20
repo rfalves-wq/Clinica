@@ -16,6 +16,7 @@ class UserProfile(models.Model):
         related_name='profile'
     )
     cpf = models.CharField(max_length=14, unique=True)
+    trocar_senha = models.BooleanField(default=True)  # 👈 NOVO
 
     def __str__(self):
         return f"{self.user.username} - {self.cpf}"
