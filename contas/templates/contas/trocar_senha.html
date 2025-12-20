@@ -13,15 +13,16 @@ body {
     font-family: 'Segoe UI', Arial, sans-serif;
 }
 
+/* animação */
 .fade-in {
     animation: fadeIn .6s ease-in-out;
 }
-
 @keyframes fadeIn {
     from { opacity:0; transform: translateY(20px); }
     to { opacity:1; transform: translateY(0); }
 }
 
+/* critérios */
 .criterio {
     font-size: 0.85rem;
 }
@@ -33,10 +34,16 @@ body {
     color: #dc3545;
 }
 
+/* barra */
 .progress {
     height: 8px;
     border-radius: 5px;
-    overflow: hidden;
+}
+
+/* ícone senha */
+.toggle-eye {
+    cursor: pointer;
+    z-index: 10;
 }
 </style>
 </head>
@@ -46,10 +53,10 @@ body {
 <div class="container vh-100 d-flex align-items-center justify-content-center">
 <div class="col-md-6 col-lg-4 fade-in">
 
-<div class="card shadow-lg border-0 rounded-4">
-<div class="card-header bg-danger text-white text-center py-3 rounded-top-4">
+<div class="card shadow border-0 rounded-4">
+<div class="card-header bg-primary text-white text-center py-3 rounded-top-4">
     <h5 class="mb-0">
-        <i class="bi bi-shield-lock-fill"></i> Alterar Senha
+        <i class="bi bi-shield-lock"></i> Alteração de Senha
     </h5>
 </div>
 
@@ -72,14 +79,20 @@ body {
     <label for="cpf">CPF</label>
 </div>
 
-<!-- SENHA -->
+<!-- NOVA SENHA -->
 <div class="form-floating mb-3 position-relative">
-    <input type="password" class="form-control" id="senha" name="senha" placeholder="Nova senha" required>
+    <input type="password"
+           class="form-control"
+           id="senha"
+           name="senha"
+           placeholder="Nova senha"
+           autocomplete="new-password"
+           required>
+
     <label for="senha">Nova senha</label>
 
-    <i class="bi bi-eye-fill position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
-       style="cursor:pointer"
-       onclick="toggleSenha('senha', this)"></i>
+    <i class="bi bi-eye-fill position-absolute top-50 end-0 translate-middle-y me-3 text-muted toggle-eye"
+       onclick="toggleSenha(this, 'senha')"></i>
 
     <div class="progress mt-2">
         <div id="senhaForca" class="progress-bar"></div>
@@ -87,27 +100,33 @@ body {
     <small id="senhaTexto" class="text-muted"></small>
 
     <ul class="mt-2 list-unstyled">
-        <li id="critLen" class="criterio invalid">❌ Mínimo 8 caracteres</li>
-        <li id="critLower" class="criterio invalid">❌ Letra minúscula</li>
-        <li id="critUpper" class="criterio invalid">❌ Letra maiúscula</li>
-        <li id="critNumber" class="criterio invalid">❌ Número</li>
-        <li id="critSymbol" class="criterio invalid">❌ Símbolo especial</li>
-        <li id="critSeq" class="criterio valid">✅ Sem sequência numérica</li>
+        <li id="critLen" class="criterio invalid">Mínimo 8 caracteres</li>
+        <li id="critLower" class="criterio invalid">Letra minúscula</li>
+        <li id="critUpper" class="criterio invalid">Letra maiúscula</li>
+        <li id="critNumber" class="criterio invalid">Número</li>
+        <li id="critSymbol" class="criterio invalid">Símbolo especial</li>
+        <li id="critSeq" class="criterio valid">Sem sequência numérica</li>
     </ul>
 </div>
 
 <!-- CONFIRMAR -->
 <div class="form-floating mb-4 position-relative">
-    <input type="password" class="form-control" id="confirmar" name="confirmar" placeholder="Confirmar senha" required>
+    <input type="password"
+           class="form-control"
+           id="confirmar"
+           name="confirmar"
+           placeholder="Confirmar senha"
+           autocomplete="new-password"
+           required>
+
     <label for="confirmar">Confirmar senha</label>
 
-    <i class="bi bi-eye-fill position-absolute top-50 end-0 translate-middle-y me-3 text-muted"
-       style="cursor:pointer"
-       onclick="toggleSenha('confirmar', this)"></i>
+    <i class="bi bi-eye-fill position-absolute top-50 end-0 translate-middle-y me-3 text-muted toggle-eye"
+       onclick="toggleSenha(this, 'confirmar')"></i>
 </div>
 
-<button class="btn btn-danger w-100 fw-semibold py-2">
-    <i class="bi bi-check-circle-fill"></i> Salvar nova senha
+<button class="btn btn-primary w-100 fw-semibold py-2">
+    <i class="bi bi-check-circle"></i> Salvar nova senha
 </button>
 
 <a href="{% url 'home' %}" class="btn btn-outline-secondary w-100 mt-2">
@@ -124,23 +143,20 @@ body {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-// MOSTRAR / OCULTAR SENHA
-function toggleSenha(id, icon) {
-    const campo = document.getElementById(id);
-    if (campo.type === "password") {
-        campo.type = "text";
-        icon.classList.replace("bi-eye-fill", "bi-eye-slash-fill");
-    } else {
-        campo.type = "password";
-        icon.classList.replace("bi-eye-slash-fill", "bi-eye-fill");
-    }
+// MOSTRAR / OCULTAR SENHA (CORRIGIDO)
+function toggleSenha(icon, idCampo) {
+    const campo = document.getElementById(idCampo);
+    const visivel = campo.type === 'text';
+
+    campo.type = visivel ? 'password' : 'text';
+    icon.classList.toggle('bi-eye-fill', visivel);
+    icon.classList.toggle('bi-eye-slash-fill', !visivel);
 }
 
-// MÁSCARA CPF
+// MÁSCARA CPF (mantida)
 const cpfInput = document.getElementById('cpf');
-cpfInput.addEventListener('input', function () {
-    let v = cpfInput.value.replace(/\D/g, '');
-    v = v.slice(0, 11);
+cpfInput.addEventListener('input', () => {
+    let v = cpfInput.value.replace(/\D/g, '').slice(0, 11);
     v = v.replace(/(\d{3})(\d)/, '$1.$2');
     v = v.replace(/(\d{3})(\d)/, '$1.$2');
     v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
@@ -149,16 +165,17 @@ cpfInput.addEventListener('input', function () {
 
 // FORÇA DA SENHA
 const senhaInput = document.getElementById('senha');
-const confirmarInput = document.getElementById('confirmar');
 const barra = document.getElementById('senhaForca');
 const texto = document.getElementById('senhaTexto');
 
-const critLen = document.getElementById('critLen');
-const critLower = document.getElementById('critLower');
-const critUpper = document.getElementById('critUpper');
-const critNumber = document.getElementById('critNumber');
-const critSymbol = document.getElementById('critSymbol');
-const critSeq = document.getElementById('critSeq');
+const regrasEls = {
+    len: document.getElementById('critLen'),
+    lower: document.getElementById('critLower'),
+    upper: document.getElementById('critUpper'),
+    num: document.getElementById('critNumber'),
+    sym: document.getElementById('critSymbol'),
+    seq: document.getElementById('critSeq')
+};
 
 function temSequencia(s) {
     return /(012|123|234|345|456|567|678|789|987|876|765|654|543|432|321|210)/.test(s);
@@ -176,17 +193,14 @@ senhaInput.addEventListener('input', () => {
         seq: !temSequencia(s)
     };
 
-    critLen.className = `criterio ${regras.len ? 'valid':'invalid'}`;
-    critLower.className = `criterio ${regras.lower ? 'valid':'invalid'}`;
-    critUpper.className = `criterio ${regras.upper ? 'valid':'invalid'}`;
-    critNumber.className = `criterio ${regras.num ? 'valid':'invalid'}`;
-    critSymbol.className = `criterio ${regras.sym ? 'valid':'invalid'}`;
-    critSeq.className = `criterio ${regras.seq ? 'valid':'invalid'}`;
+    Object.keys(regras).forEach(k => {
+        regrasEls[k].className = `criterio ${regras[k] ? 'valid' : 'invalid'}`;
+    });
 
     const pontos = Object.values(regras).filter(Boolean).length;
-    barra.style.width = `${(pontos/6)*100}%`;
-    barra.className = `progress-bar ${pontos<3?'bg-danger':pontos<5?'bg-warning':'bg-success'}`;
-    texto.textContent = pontos<3?'Senha fraca':pontos<5?'Senha média':'Senha forte';
+    barra.style.width = `${(pontos / 6) * 100}%`;
+    barra.className = `progress-bar ${pontos < 3 ? 'bg-danger' : pontos < 5 ? 'bg-warning' : 'bg-success'}`;
+    texto.textContent = pontos < 3 ? 'Senha fraca' : pontos < 5 ? 'Senha média' : 'Senha forte';
 });
 </script>
 

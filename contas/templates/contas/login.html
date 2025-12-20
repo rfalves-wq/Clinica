@@ -4,11 +4,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login PT - Saúde</title>
+<title>Login - Sistema Clínico</title>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
 <style>
-/* Fundo com imagem e overlay escuro suave */
+/* Fundo com imagem (MANTIDA) */
 body {
     height: 100vh;
     margin: 0;
@@ -22,228 +24,185 @@ body {
     position: relative;
 }
 
-/* overlay escuro semi-transparente */
+/* Overlay escuro */
 body::before {
     content: '';
     position: absolute;
-    top:0; left:0;
-    width:100%; height:100%;
-    background: rgba(0,0,0,0.55); /* overlay escuro */
+    inset: 0;
+    background: rgba(0,0,0,0.55);
     z-index: 0;
 }
 
-/* Card flutuante transparente estilo glassmorphism */
+/* Card glass */
 .login-card {
-    background: rgba(255, 255, 255, 0.25); /* bem transparente */
+    background: rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    padding: 3rem 2rem 2rem 2rem;
+    padding: 3rem 2rem 2rem;
     border-radius: 1.5rem;
     box-shadow: 0 20px 40px rgba(0,0,0,0.25);
     width: 100%;
     max-width: 450px;
     position: relative;
-    z-index: 1; /* acima do overlay */
+    z-index: 1;
     text-align: center;
-    border: 1px solid rgba(255,255,255,0.3); /* borda suave */
+    border: 1px solid rgba(255,255,255,0.3);
     color: #fff;
     transition: all 0.5s ease;
 }
 
 .login-card:hover {
     transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
 }
 
-/* Estrela PT */
-.pt-star {
-    font-size: 3rem;
-    color: #ff6666;
-    margin-bottom: 1rem;
-    animation: pulse 2s infinite;
-}
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-}
-
-/* Animação shake do card */
-.login-card.shake {
-    animation: shake 0.5s;
-}
-@keyframes shake {
-    0% { transform: translateX(0); }
-    20% { transform: translateX(-10px); }
-    40% { transform: translateX(10px); }
-    60% { transform: translateX(-10px); }
-    80% { transform: translateX(10px); }
-    100% { transform: translateX(0); }
-}
-
+/* Título */
 .login-card h2 {
     margin-bottom: 2rem;
     font-weight: 700;
     color: #ffdddd;
-    letter-spacing: 0.5px;
 }
 
-/* Inputs e botões */
+/* Inputs */
 .form-control {
     border-radius: 0.75rem;
-    transition: all 0.3s;
     border: 1px solid rgba(255,255,255,0.3);
     background: rgba(255,255,255,0.2);
     color: #fff;
-    padding: 0.75rem;
 }
 .form-control::placeholder {
     color: #f0f0f0;
 }
 .form-control:focus {
-    box-shadow: 0 0 0 0.2rem rgba(255,255,255,0.3);
-    border-color: rgba(255,255,255,0.5);
     background: rgba(255,255,255,0.25);
+    box-shadow: 0 0 0 0.2rem rgba(255,255,255,0.3);
 }
 
+/* Input icons */
 .input-group-text {
-    background-color: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.2);
     color: #fff;
     border: 1px solid rgba(255,255,255,0.3);
     cursor: pointer;
-    transition: all 0.3s;
-}
-.input-group-text:hover {
-    background-color: rgba(255,255,255,0.3);
-    transform: scale(1.05);
 }
 
+/* Botão */
 .btn-primary {
-    background-color: rgba(227,27,35,0.8);
-    color: #fff;
+    background-color: rgba(47,128,237,0.85);
     border: none;
     font-weight: 600;
-    transition: all 0.3s;
     border-radius: 0.75rem;
-    padding: 0.75rem;
 }
 .btn-primary:hover {
-    background-color: rgba(183,28,28,0.8);
-    transform: translateY(-2px);
+    background-color: rgba(28,95,184,0.9);
 }
 
+/* Links */
 .forgot-link a {
-    color: #ffcccc;
+    color: #ffdede;
     text-decoration: none;
-    transition: color 0.3s;
 }
 .forgot-link a:hover {
-    color: #ff9999;
+    color: #ffffff;
 }
 
-/* Alertas suaves */
-.fade-alert {
-    opacity: 0;
-    transform: translateY(-15px);
-    transition: all 0.5s ease;
+/* Shake */
+.login-card.shake {
+    animation: shake 0.5s;
 }
-.fade-alert.show {
-    opacity: 1;
-    transform: translateY(0);
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+    75% { transform: translateX(-10px); }
+    100% { transform: translateX(0); }
 }
 </style>
 </head>
+
 <body>
 
 <div class="login-card" id="loginCard">
-    <div class="pt-star">&#9733;</div>
-    <h2>Login PT</h2>
+    <h2>Acesso ao Sistema</h2>
 
     {% if messages %}
         {% for message in messages %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show fade-alert" role="alert">
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
                 {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         {% endfor %}
     {% endif %}
 
     <form method="POST" id="loginForm" novalidate>
         {% csrf_token %}
-        {{ form.non_field_errors }}
 
         <div class="mb-3">
             <label class="form-label">Usuário</label>
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
-                {{ form.username|add_class:"form-control" | attr:"id:username" | attr:"placeholder:Digite seu usuário" }}
+                {{ form.username|add_class:"form-control"|attr:"id:username"|attr:"placeholder:Digite seu usuário" }}
             </div>
-            <div class="invalid-feedback">Por favor, preencha o usuário.</div>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Senha</label>
             <div class="input-group">
-                <span class="input-group-text" id="togglePassword"><i class="bi bi-eye-fill"></i></span>
-                {{ form.password|add_class:"form-control" | attr:"id:password" | attr:"placeholder:Digite sua senha" }}
+                <span class="input-group-text" id="togglePassword">
+                    <i class="bi bi-eye-fill"></i>
+                </span>
+                {{ form.password|add_class:"form-control"|attr:"id:password"|attr:"placeholder:Digite sua senha" }}
             </div>
-            <div class="invalid-feedback">Por favor, preencha a senha.</div>
         </div>
 
-        <div class="form-check mb-3">
+        <div class="form-check mb-3 text-start">
             <input class="form-check-input" type="checkbox" id="rememberMe">
-            <label class="form-check-label" for="rememberMe">Lembrar usuário</label>
+            <label class="form-check-label" for="rememberMe">
+                Lembrar usuário
+            </label>
         </div>
 
         <button type="submit" class="btn btn-primary w-100">Entrar</button>
 
         <div class="mt-3 text-center forgot-link">
-    <a href="{% url 'simple_password_reset' %}">Esqueceu a senha?</a>
-</div>
+            <a href="{% url 'simple_password_reset' %}">Esqueceu a senha?</a>
+        </div>
     </form>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
-const loginForm = document.querySelector('#loginForm');
-const usernameInput = document.querySelector('#username');
-const passwordInput = document.querySelector('#password');
-const togglePassword = document.querySelector('#togglePassword');
-const loginCard = document.querySelector('#loginCard');
-const rememberMe = document.querySelector('#rememberMe');
+const togglePassword = document.getElementById('togglePassword');
+const passwordInput = document.getElementById('password');
+const loginCard = document.getElementById('loginCard');
+const usernameInput = document.getElementById('username');
+const rememberMe = document.getElementById('rememberMe');
 
 togglePassword.addEventListener('click', () => {
     const type = passwordInput.type === 'password' ? 'text' : 'password';
     passwordInput.type = type;
-    togglePassword.innerHTML = type === 'password' ? '<i class="bi bi-eye-fill"></i>' : '<i class="bi bi-eye-slash-fill"></i>';
+    togglePassword.innerHTML =
+        type === 'password'
+        ? '<i class="bi bi-eye-fill"></i>'
+        : '<i class="bi bi-eye-slash-fill"></i>';
 });
 
-window.addEventListener('load', () => {
+window.onload = () => {
     const savedUser = localStorage.getItem('savedUser');
-    if(savedUser) { usernameInput.value = savedUser; rememberMe.checked = true; }
-    const alerts = document.querySelectorAll('.fade-alert');
-    alerts.forEach(alert => setTimeout(() => alert.classList.add('show'), 100));
-});
+    if (savedUser) {
+        usernameInput.value = savedUser;
+        rememberMe.checked = true;
+    }
+};
 
-usernameInput.addEventListener('input', () => {
-    usernameInput.classList.remove('is-invalid');
-    if(usernameInput.value.trim() !== '') usernameInput.classList.add('is-valid');
-});
-passwordInput.addEventListener('input', () => {
-    passwordInput.classList.remove('is-invalid');
-    if(passwordInput.value.trim() !== '') passwordInput.classList.add('is-valid');
-});
-
-loginForm.addEventListener('submit', (e) => {
-    let valid = true;
-    if(usernameInput.value.trim() === '') { usernameInput.classList.add('is-invalid'); valid=false;}
-    if(passwordInput.value.trim() === '') { passwordInput.classList.add('is-invalid'); valid=false;}
-    if(!valid) {
+document.getElementById('loginForm').addEventListener('submit', e => {
+    if (!usernameInput.value || !passwordInput.value) {
         e.preventDefault();
         loginCard.classList.add('shake');
         setTimeout(() => loginCard.classList.remove('shake'), 500);
     } else {
-        if(rememberMe.checked) { localStorage.setItem('savedUser', usernameInput.value); }
-        else { localStorage.removeItem('savedUser'); }
+        rememberMe.checked
+            ? localStorage.setItem('savedUser', usernameInput.value)
+            : localStorage.removeItem('savedUser');
     }
 });
 </script>
