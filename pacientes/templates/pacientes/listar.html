@@ -38,6 +38,7 @@
                             <th>Idade</th>
                             <th>CPF</th>
                             <th>Status</th>
+                            <th>Fila</th>
                             <th class="text-center">Ações</th>
                         </tr>
                     </thead>
@@ -50,28 +51,34 @@
                             <td>{{ paciente.idade }}</td>
                             <td>{{ paciente.cpf|mascara_cpf }}</td>
                             <td>
-                                {% if paciente.status == 'AGUARDANDO' %}
-                                <span class="badge bg-secondary">Aguardando</span>
-                                {% elif paciente.status == 'TRIAGEM' %}
-                                <span class="badge bg-warning text-dark">Triagem</span>
-                                {% elif paciente.status == 'ATENDIMENTO' %}
-                                <span class="badge bg-success">Atendimento</span>
-                                {% endif %}
+                               <td>
+    {% if paciente.status == 'AGUARDANDO' %}
+        <span class="badge bg-secondary">Aguardando</span>
+    {% elif paciente.status == 'TRIAGEM' %}
+        <span class="badge bg-warning text-dark">Triagem</span>
+    {% elif paciente.status == 'ATENDIMENTO' %}
+        <span class="badge bg-success">Atendimento</span>
+    {% endif %}
+</td>
 
-                                
+
+
                             </td>
 
                             <td class="text-center">
 
-                                <a href="{% url 'mudar_status' paciente.pk 'AGUARDANDO' %}" class="btn btn-sm btn-secondary">
-        Aguardando
-    </a>
-    <a href="{% url 'mudar_status' paciente.pk 'TRIAGEM' %}" class="btn btn-sm btn-warning">
-        Triagem
-    </a>
-    <a href="{% url 'mudar_status' paciente.pk 'ATENDIMENTO' %}" class="btn btn-sm btn-success">
-        Atendimento
-    </a>
+                               <td class="text-center">
+    {% if paciente.status == 'AGUARDANDO' %}
+        <a href="{% url 'mudar_status' paciente.pk 'TRIAGEM' %}" class="btn btn-sm btn-warning">
+            Iniciar Triagem
+        </a>
+    {% elif paciente.status == 'TRIAGEM' %}
+        <a href="{% url 'mudar_status' paciente.pk 'ATENDIMENTO' %}" class="btn btn-sm btn-success">
+            Encaminhar Médico
+        </a>
+    {% endif %}
+</td>
+
                                 <a href="{% url 'editar_paciente' paciente.pk %}" class="btn btn-sm btn-warning">
                                     Editar
                                 </a>
@@ -82,7 +89,7 @@
 
 
                             </td>
-                            
+
                         </tr>
                         {% empty %}
                         <tr>

@@ -10,11 +10,26 @@ from django.core.paginator import Paginator
 import re
 from .models import Paciente
 
+from django.db.models import Q, Case, When, IntegerField
+from django.core.paginator import Paginator
+import re
+
 def listar_pacientes(request):
     termo = request.GET.get('busca', '').strip()
     pagina = request.GET.get('page', 1)
 
-    pacientes = Paciente.objects.all().order_by('nome')
+    pacientes = Paciente.objects.all()
+
+    # Ordem da fila por status
+    pacientes = pacientes.annotate(
+        ordem_status=Case(
+            When(status='AGUARDANDO', then=0),
+            When(status='TRIAGEM', then=1),
+            When(status='ATENDIMENTO', then=2),
+            default=3,
+            output_field=IntegerField()
+        )
+    ).order_by('ordem_status', 'criado_em')
 
     if termo:
         termo_limpo = re.sub(r'\D', '', termo)
@@ -23,14 +38,15 @@ def listar_pacientes(request):
             Q(cpf__icontains=termo_limpo)
         )
 
-    paginator = Paginator(pacientes, 10)  # 10 pacientes por página
+    paginator = Paginator(pacientes, 10)
     page_obj = paginator.get_page(pagina)
 
     return render(request, 'pacientes/listar.html', {
+        'pacientes': page_obj,
         'page_obj': page_obj,
-        'pacientes': page_obj,  # compatível com seu template
         'termo': termo
     })
+
 
 
 
