@@ -1,0 +1,41 @@
+<h1>
+    {% if form.instance.pk %}
+        Editar
+    {% else %}
+        Adicionar
+    {% endif %}
+    Paciente
+</h1>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label class="form-label">Nome</label>
+        {{ form.nome }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Idade</label>
+        {{ form.idade }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">CPF</label>
+        {{ form.cpf }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Telefone</label>
+        {{ form.telefone }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        {{ form.email }}
+    </div>
+
+    <button type="submit">Salvar</button>
+</form>
+
+<a href="{% url 'listar_pacientes' %}">Voltar</a>
