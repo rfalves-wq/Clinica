@@ -40,6 +40,7 @@ INSTALLED_APPS = [
        'contas',
        'widget_tweaks',
        'pacientes',
+       'consulta',
        
 ]
 
