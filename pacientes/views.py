@@ -40,3 +40,5 @@ def excluir_paciente(request, pk):
         paciente.delete()
         return redirect('listar_pacientes')
     return render(request, 'pacientes/confirmar_exclusao.html', {'paciente': paciente})
+
+
