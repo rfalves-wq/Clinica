@@ -1,7 +1,6 @@
 {% load cpf_filters %}
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <title>Lista de Pacientes</title>
@@ -10,146 +9,156 @@
 
 <body class="bg-light">
 
-    <div class="container mt-5">
+<div class="container mt-5">
 
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold mb-0">Lista de Pacientes</h2>
-            <a href="{% url 'adicionar_paciente' %}" class="btn btn-primary">
-                + Adicionar Paciente
+    <!-- TOPO -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex align-items-center gap-2">
+            <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                ⬅ Home
             </a>
+            <h2 class="fw-bold mb-0">Lista de Pacientes</h2>
         </div>
 
-        <!-- BUSCA -->
-        <form method="get" class="mb-3">
-            <div class="input-group">
-                <input type="text" name="busca" id="busca" class="form-control" placeholder="Buscar por nome ou CPF"
-                    value="{{ termo|default:'' }}" oninput="mascaraCPF(this)">
-                <button class="btn btn-outline-primary" type="submit">
-                    Buscar
-                </button>
-
-                {% if termo %}
-                <a href="{% url 'listar_pacientes' %}" class="btn btn-outline-secondary">
-                    Limpar
-                </a>
-                {% endif %}
-            </div>
-        </form>
-
-        <div class="card shadow-sm">
-            <div class="card-body p-0">
-
-                <table class="table table-hover table-striped mb-0">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Nome</th>
-                            <th>Idade</th>
-                            <th>CPF</th>
-                            <th class="text-center">Ações</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {% for paciente in pacientes %}
-                        <tr>
-                            <td>{{ paciente.nome }}</td>
-                            <td>{{ paciente.idade }}</td>
-                            <td>{{ paciente.cpf|mascara_cpf }}</td>
-                            <td class="text-center">
-                                <a href="{% url 'editar_paciente' paciente.pk %}"
-                                    class="btn btn-sm btn-outline-warning">
-                                    Editar
-                                </a>
-                                <a href="{% url 'excluir_paciente' paciente.pk %}" class="btn btn-sm btn-outline-danger"
-                                    onclick="return confirm('Deseja realmente excluir este paciente?');">
-                                    Excluir
-                                </a>
-                              <!--
-                                <a href="{% url 'marcar_consulta' paciente.id %}" class="btn btn-sm btn-success">
-                                    <a href="{% url 'fila_espera' %}" class="btn btn-secondary">
-                                        Fila de Espera
-                                    </a>
-                                    Marcar Consulta
-                                </a>
-                                -->
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="4" class="text-center text-muted py-4">
-                                Nenhum paciente cadastrado.
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-
-                <!-- PAGINAÇÃO -->
-                {% if page_obj %}
-                {% if page_obj.has_other_pages %}
-                <nav class="mt-3">
-                    <ul class="pagination justify-content-center">
-
-                        {% if page_obj.has_previous %}
-                        <li class="page-item">
-                            <a class="page-link"
-                                href="?page={{ page_obj.previous_page_number }}{% if termo %}&busca={{ termo }}{% endif %}">
-                                Anterior
-                            </a>
-                        </li>
-                        {% else %}
-                        <li class="page-item disabled">
-                            <span class="page-link">Anterior</span>
-                        </li>
-                        {% endif %}
-
-                        {% for num in page_obj.paginator.page_range %}
-                        {% if page_obj.number == num %}
-                        <li class="page-item active">
-                            <span class="page-link">{{ num }}</span>
-                        </li>
-                        {% elif num >= page_obj.number|add:-2 and num <= page_obj.number|add:2 %} <li class="page-item">
-                            <a class="page-link" href="?page={{ num }}{% if termo %}&busca={{ termo }}{% endif %}">
-                                {{ num }}
-                            </a>
-                            </li>
-                            {% endif %}
-                            {% endfor %}
-
-                            {% if page_obj.has_next %}
-                            <li class="page-item">
-                                <a class="page-link"
-                                    href="?page={{ page_obj.next_page_number }}{% if termo %}&busca={{ termo }}{% endif %}">
-                                    Próxima
-                                </a>
-                            </li>
-                            {% else %}
-                            <li class="page-item disabled">
-                                <span class="page-link">Próxima</span>
-                            </li>
-                            {% endif %}
-
-                    </ul>
-                </nav>
-                {% endif %}
-                {% endif %}
-
-            </div>
-        </div>
-
+        <a href="{% url 'adicionar_paciente' %}" class="btn btn-primary">
+            + Adicionar Paciente
+        </a>
     </div>
 
-    <script>
-        function mascaraCPF(input) {
-            let value = input.value.replace(/\D/g, '');
-            if (value.length > 11) value = value.slice(0, 11);
-            value = value.replace(/(\d{3})(\d)/, '$1.$2');
-            value = value.replace(/(\d{3})(\d)/, '$1.$2');
-            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-            input.value = value;
-        }
-    </script>
+    <!-- BUSCA -->
+    <form method="get" class="mb-3">
+        <div class="input-group">
+            <input
+                type="text"
+                name="busca"
+                id="busca"
+                class="form-control"
+                placeholder="Buscar por nome ou CPF"
+                value="{{ termo|default:'' }}"
+                oninput="mascaraCPF(this)"
+            >
+            <button class="btn btn-outline-primary" type="submit">
+                Buscar
+            </button>
+
+            {% if termo %}
+            <a href="{% url 'listar_pacientes' %}" class="btn btn-outline-secondary">
+                Limpar
+            </a>
+            {% endif %}
+        </div>
+    </form>
+
+    <!-- TABELA -->
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+
+            <table class="table table-hover table-striped mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Nome</th>
+                        <th>Idade</th>
+                        <th>CPF</th>
+                        <th class="text-center">Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for paciente in pacientes %}
+                    <tr>
+                        <td>{{ paciente.nome }}</td>
+                        <td>{{ paciente.idade }}</td>
+                        <td>{{ paciente.cpf|mascara_cpf }}</td>
+                       <td class="text-center">
+    <a href="{% url 'editar_paciente' paciente.pk %}"
+       class="btn btn-sm btn-outline-warning">
+        Editar
+    </a>
+
+    <a href="{% url 'excluir_paciente' paciente.pk %}"
+       class="btn btn-sm btn-outline-danger"
+       onclick="return confirm('Deseja realmente excluir este paciente?');">
+        Excluir
+    </a>
+
+</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center text-muted py-4">
+                            Nenhum paciente cadastrado.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- PAGINAÇÃO -->
+            {% if page_obj and page_obj.has_other_pages %}
+            <nav class="mt-3">
+                <ul class="pagination justify-content-center">
+
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?page={{ page_obj.previous_page_number }}{% if termo %}&busca={{ termo }}{% endif %}">
+                            Anterior
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">Anterior</span>
+                    </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                        {% elif num >= page_obj.number|add:-2 and num <= page_obj.number|add:2 %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                   href="?page={{ num }}{% if termo %}&busca={{ termo }}{% endif %}">
+                                    {{ num }}
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?page={{ page_obj.next_page_number }}{% if termo %}&busca={{ termo }}{% endif %}">
+                            Próxima
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">Próxima</span>
+                    </li>
+                    {% endif %}
+
+                </ul>
+            </nav>
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+<!-- MÁSCARA CPF -->
+<script>
+function mascaraCPF(input) {
+    let value = input.value.replace(/\D/g, '');
+    if (value.length > 11) value = value.slice(0, 11);
+    value = value.replace(/(\d{3})(\d)/, '$1.$2');
+    value = value.replace(/(\d{3})(\d)/, '$1.$2');
+    value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    input.value = value;
+}
+</script>
 
 </body>
-
 </html>
