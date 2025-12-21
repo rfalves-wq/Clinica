@@ -66,3 +66,12 @@ def excluir_paciente(request, pk):
         paciente.delete()
         return redirect('listar_pacientes')
     return render(request, 'pacientes/confirmar_exclusao.html', {'paciente': paciente})
+
+
+from django.shortcuts import redirect
+
+def mudar_status(request, pk, status):
+    paciente = get_object_or_404(Paciente, pk=pk)
+    paciente.status = status
+    paciente.save()
+    return redirect('listar_pacientes')
