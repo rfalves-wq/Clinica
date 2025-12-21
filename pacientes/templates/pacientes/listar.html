@@ -1,3 +1,5 @@
+
+{% load cpf_filters %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -16,6 +18,23 @@
             + Adicionar Paciente
         </a>
     </div>
+<form method="get" class="mb-3">
+    <div class="input-group">
+        <input
+            type="text"
+            name="busca"
+            id="busca"
+            class="form-control"
+            placeholder="Buscar por nome ou CPF"
+            value="{{ termo }}"
+            oninput="mascaraCPF(this)"
+        >
+        <button class="btn btn-outline-primary" type="submit">
+            Buscar
+        </button>
+    </div>
+</form>
+
 
     <div class="card shadow-sm">
         <div class="card-body p-0">
@@ -33,7 +52,8 @@
                         <tr>
                             <td>{{ paciente.nome }}</td>
                             <td>{{ paciente.idade }}</td>
-                            <td>{{ paciente.cpf }}</td>
+                            <td>{{ paciente.cpf|mascara_cpf }}</td>
+
                             <td class="text-center">
                                 <a href="{% url 'editar_paciente' paciente.pk %}" 
                                    class="btn btn-sm btn-warning">
@@ -63,14 +83,11 @@
 </body>
 </html>
 
-
 <script>
 function mascaraCPF(input) {
     let value = input.value.replace(/\D/g, '');
 
-    if (value.length > 11) {
-        value = value.slice(0, 11);
-    }
+    if (value.length > 11) value = value.slice(0, 11);
 
     value = value.replace(/(\d{3})(\d)/, '$1.$2');
     value = value.replace(/(\d{3})(\d)/, '$1.$2');
@@ -79,3 +96,4 @@ function mascaraCPF(input) {
     input.value = value;
 }
 </script>
+
