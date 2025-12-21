@@ -4,22 +4,34 @@ from .models import Paciente
 from .forms import PacienteForm
 
 
-# LISTAR + BUSCA POR NOME/CPF
+from django.shortcuts import render
+from django.db.models import Q
+from django.core.paginator import Paginator
+import re
+from .models import Paciente
+
 def listar_pacientes(request):
     termo = request.GET.get('busca', '').strip()
+    pagina = request.GET.get('page', 1)
 
-    pacientes = Paciente.objects.all()
+    pacientes = Paciente.objects.all().order_by('nome')
 
     if termo:
+        termo_limpo = re.sub(r'\D', '', termo)
         pacientes = pacientes.filter(
             Q(nome__icontains=termo) |
-            Q(cpf__icontains=termo)
+            Q(cpf__icontains=termo_limpo)
         )
 
+    paginator = Paginator(pacientes, 10)  # 10 pacientes por página
+    page_obj = paginator.get_page(pagina)
+
     return render(request, 'pacientes/listar.html', {
-        'pacientes': pacientes,
+        'page_obj': page_obj,
+        'pacientes': page_obj,  # compatível com seu template
         'termo': termo
     })
+
 
 
 # ADICIONAR
