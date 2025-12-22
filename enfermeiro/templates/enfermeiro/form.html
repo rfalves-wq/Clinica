@@ -1,0 +1,9 @@
+<h2>Enfermeiro</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Salvar</button>
+</form>
+
+<a href="{% url 'enfermeiro_list' %}">Voltar</a>

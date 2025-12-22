@@ -11,5 +11,7 @@ urlpatterns = [
     path('consulta/', include('consulta.urls')),
     path('consulta/', include('consulta.urls')),
     path('triagem/', include('triagem.urls')),  # ← ESSENCIAL
+    path('enfermeiros/', include('enfermeiro.urls')),
+    
 
 ]

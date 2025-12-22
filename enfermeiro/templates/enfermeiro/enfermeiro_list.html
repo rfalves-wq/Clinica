@@ -1,0 +1,12 @@
+<h2>Enfermeiros</h2>
+<a href="{% url 'enfermeiro_create' %}">Novo Enfermeiro</a>
+
+<ul>
+{% for e in enfermeiros %}
+  <li>
+    {{ e.nome }} - {{ e.cpf }}
+    <a href="{% url 'enfermeiro_update' e.id %}">Editar</a>
+    <a href="{% url 'enfermeiro_delete' e.id %}">Excluir</a>
+  </li>
+{% endfor %}
+</ul>
