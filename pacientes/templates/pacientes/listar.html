@@ -74,6 +74,10 @@
        class="btn btn-sm btn-outline-warning">
         Editar
     </a>
+<a href="{% url 'marcar_consulta' paciente.pk %}"
+   class="btn btn-sm btn-outline-success">
+    Marcar Consulta
+</a>
 
     <a href="{% url 'excluir_paciente' paciente.pk %}"
        class="btn btn-sm btn-outline-danger"

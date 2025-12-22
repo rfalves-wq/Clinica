@@ -7,5 +7,7 @@ urlpatterns = [
         'mudar-status/<int:consulta_id>/<str:status>/',
         views.mudar_status,
         name='mudar_status'
+       
     ),
+     path('marcar/<int:paciente_id>/', views.marcar_consulta, name='marcar_consulta'),
 ]
