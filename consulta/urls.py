@@ -10,4 +10,5 @@ urlpatterns = [
        
     ),
      path('marcar/<int:paciente_id>/', views.marcar_consulta, name='marcar_consulta'),
+     path('fila/', views.fila_espera, name='fila_espera'),
 ]

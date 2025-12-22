@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title>Fila de Espera</title>
@@ -8,55 +9,55 @@
 
 <body class="bg-light">
 
-<div class="container mt-5">
-    <h2 class="mb-4">Fila de Espera</h2>
+    <div class="container mt-5">
 
-    <table class="table table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>Paciente</th>
-                <th>CPF</th>
-               <!-- <th>Status</th> -->
-                <th>Ações</th>
-            </tr>
-        </thead>
+        <!-- Botão Home -->
+        <div class="d-flex justify-content-end mb-3">
+            <a href="{% url 'home' %}" class="btn btn-primary">
+                🏠 Home
+            </a>
+        </div>
 
-        <tbody>
+        <h2 class="mb-4">Fila de Espera</h2>
 
-            {% for consulta in consultas %}
-            <tr>
-                <td>{{ consulta.paciente.nome }}</td>
-               <!-- <td>{{ consulta.paciente.cpf }}</td>-->
-                <td>
-                    <span class="badge bg-info">
-                        {{ consulta.get_status_display }}
-                    </span>
-                </td>
-                <td>
-                    {% if consulta.status == 'AGUARDANDO' %}
-                        <a href="{% url 'mudar_status' consulta.id 'TRIAGEM' %}"
-                           class="btn btn-sm btn-warning">
-                            Iniciar Triagem
+        <table class="table table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Paciente</th>
+                    <th>Status</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for consulta in consultas %}
+                <tr>
+                    <td>{{ consulta.paciente.nome }}</td>
+                    <td>
+                        <span class="badge bg-info">
+                            {{ consulta.get_status_display }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if consulta.status == 'AGUARDANDO' %}
+                        <a href="{% url 'realizar_triagem' consulta.id %}"
+                           class="btn btn-warning btn-sm">
+                            Fazer Triagem
                         </a>
-                    {% elif consulta.status == 'TRIAGEM' %}
-                        <a href="{% url 'mudar_status' consulta.id 'ATENDIMENTO' %}"
-                           class="btn btn-sm btn-success">
-                            Encaminhar Médico
-                        </a>
-                    {% endif %}
-                </td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="4" class="text-center text-muted">
-                    Nenhuma consulta na fila
-                </td>
-            </tr>
-            {% endfor %}
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-center text-muted">
+                        Nenhuma consulta na fila
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-        </tbody>
-    </table>
-</div>
+    </div>
 
 </body>
 </html>

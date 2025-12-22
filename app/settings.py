@@ -41,6 +41,8 @@ INSTALLED_APPS = [
        'widget_tweaks',
        'pacientes',
        'consulta',
+       'enfermeiro',
+       'triagem',
        
 ]
 
