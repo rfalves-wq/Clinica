@@ -1,0 +1,23 @@
+<h2>Médicos</h2>
+
+<a href="{% url 'medico_create' %}">Novo Médico</a>
+
+<table border="1">
+    <tr>
+        <th>Nome</th>
+        <th>CRM</th>
+        <th>Especialidade</th>
+        <th>Ações</th>
+    </tr>
+    {% for medico in medicos %}
+    <tr>
+        <td>{{ medico.nome }}</td>
+        <td>{{ medico.crm }}</td>
+        <td>{{ medico.especialidade }}</td>
+        <td>
+            <a href="{% url 'medico_update' medico.id %}">Editar</a>
+            <a href="{% url 'medico_delete' medico.id %}">Excluir</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>

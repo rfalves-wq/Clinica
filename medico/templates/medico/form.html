@@ -1,0 +1,9 @@
+<h2>Médico</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Salvar</button>
+</form>
+
+<a href="{% url 'medico_list' %}">Voltar</a>
