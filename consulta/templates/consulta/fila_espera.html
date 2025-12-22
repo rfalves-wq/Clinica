@@ -16,7 +16,7 @@
             <tr>
                 <th>Paciente</th>
                 <th>CPF</th>
-                <th>Status</th>
+               <!-- <th>Status</th> -->
                 <th>Ações</th>
             </tr>
         </thead>
@@ -26,7 +26,7 @@
             {% for consulta in consultas %}
             <tr>
                 <td>{{ consulta.paciente.nome }}</td>
-                <td>{{ consulta.paciente.cpf }}</td>
+               <!-- <td>{{ consulta.paciente.cpf }}</td>-->
                 <td>
                     <span class="badge bg-info">
                         {{ consulta.get_status_display }}
