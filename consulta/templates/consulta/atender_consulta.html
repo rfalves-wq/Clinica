@@ -38,6 +38,26 @@
                     {{ form.observacoes.label_tag }}
                     {{ form.observacoes }}
                 </div>
+<h2>Atendimento Médico</h2>
+
+<p><strong>Paciente:</strong> {{ consulta.paciente }}</p>
+
+<hr>
+
+{% if triagem %}
+    <h3>Dados da Triagem</h3>
+
+    <ul>
+        <li><strong>Peso:</strong> {{ triagem.peso }} kg</li>
+        <li><strong>Altura:</strong> {{ triagem.altura }} m</li>
+        <li><strong>Pressão:</strong> {{ triagem.pressao }}</li>
+        <li><strong>Observações:</strong> {{ triagem.observacoes }}</li>
+    </ul>
+{% else %}
+    <p style="color:red;">
+        Triagem ainda não realizada.
+    </p>
+{% endif %}
 
                 <button class="btn btn-success">
                     Finalizar Atendimento

@@ -19,10 +19,33 @@
            <form method="post">
     {% csrf_token %}
 
+    
     <div class="mb-3">
-        {{ form.observacoes.label_tag }}
-        {{ form.observacoes }}
+    {{ form.peso.label_tag }}
+    {{ form.peso }}
+</div>
+
+<div class="mb-3">
+    {{ form.altura.label_tag }}
+    {{ form.altura }}
+</div>
+
+<div class="mb-3">
+    {{ form.pressao.label_tag }}
+    {{ form.pressao }}
+</div>
+
+<div class="mb-3">
+    {{ form.observacoes.label_tag }}
+    {{ form.observacoes }}
+</div>
+
+{% if form.errors %}
+    <div class="alert alert-danger">
+        <strong>Erros no formulário:</strong>
+        {{ form.errors }}
     </div>
+{% endif %}
 
     <button type="submit" class="btn btn-success">
         Finalizar Triagem

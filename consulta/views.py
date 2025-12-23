@@ -69,25 +69,23 @@ from triagem.models import Triagem
 from triagem.models import Triagem
 from triagem.forms import TriagemForm
 
+from django.shortcuts import render, get_object_or_404
+from .models import Consulta
+from triagem.models import Triagem
+
 def atender_consulta(request, consulta_id):
     consulta = get_object_or_404(Consulta, id=consulta_id)
 
-    triagem, created = Triagem.objects.get_or_create(
-        consulta=consulta
-    )
-
-    if request.method == 'POST':
-        form = TriagemForm(request.POST, instance=triagem)
-        if form.is_valid():
-            form.save()
-            consulta.status = 'FINALIZADA'
-            consulta.save()
-            return redirect('fila_medico')
-    else:
-        form = TriagemForm(instance=triagem)
+    # tenta buscar a triagem
+    try:
+        triagem = consulta.triagem
+    except Triagem.DoesNotExist:
+        triagem = None
 
     return render(request, 'consulta/atender_consulta.html', {
         'consulta': consulta,
-        'form': form
+        'triagem': triagem
     })
+
+
 

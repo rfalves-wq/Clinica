@@ -5,10 +5,6 @@ from .forms import TriagemForm
 def realizar_triagem(request, consulta_id):
     consulta = get_object_or_404(Consulta, id=consulta_id)
 
-    # 🔒 evita triagem duplicada
-    if hasattr(consulta, 'triagem'):
-        return redirect('fila_medico')
-
     if request.method == 'POST':
         form = TriagemForm(request.POST)
         if form.is_valid():
@@ -16,7 +12,7 @@ def realizar_triagem(request, consulta_id):
             triagem.consulta = consulta
             triagem.save()
 
-            # muda status da consulta
+            # 🔁 manda para o médico
             consulta.status = 'AGUARDANDO_MEDICO'
             consulta.save()
 
