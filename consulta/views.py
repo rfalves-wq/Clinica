@@ -64,25 +64,30 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Consulta
 from triagem.forms import TriagemForm
 
+from triagem.models import Triagem
+
+from triagem.models import Triagem
+from triagem.forms import TriagemForm
+
 def atender_consulta(request, consulta_id):
     consulta = get_object_or_404(Consulta, id=consulta_id)
 
-    if request.method == 'POST':
-        form = TriagemForm(request.POST)
-        if form.is_valid():
-            triagem = form.save(commit=False)
-            triagem.consulta = consulta
-            triagem.save()
+    triagem, created = Triagem.objects.get_or_create(
+        consulta=consulta
+    )
 
-            # finaliza consulta
+    if request.method == 'POST':
+        form = TriagemForm(request.POST, instance=triagem)
+        if form.is_valid():
+            form.save()
             consulta.status = 'FINALIZADA'
             consulta.save()
-
             return redirect('fila_medico')
     else:
-        form = TriagemForm()
+        form = TriagemForm(instance=triagem)
 
     return render(request, 'consulta/atender_consulta.html', {
         'consulta': consulta,
         'form': form
     })
+

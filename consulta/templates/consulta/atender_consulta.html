@@ -10,24 +10,28 @@
 <div class="container mt-4">
     <div class="card shadow">
         <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">Atendimento Médico</h5>
+            <h5>Atendimento Médico</h5>
         </div>
 
         <div class="card-body">
             <p><strong>Paciente:</strong> {{ consulta.paciente }}</p>
-            <p><strong>Data:</strong> {{ consulta.data|date:"d/m/Y H:i" }}</p>
 
             <form method="post">
                 {% csrf_token %}
 
                 <div class="mb-3">
-                    {{ form.diagnostico.label_tag }}
-                    {{ form.diagnostico }}
+                    {{ form.peso.label_tag }}
+                    {{ form.peso }}
                 </div>
 
                 <div class="mb-3">
-                    {{ form.prescricao.label_tag }}
-                    {{ form.prescricao }}
+                    {{ form.altura.label_tag }}
+                    {{ form.altura }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.pressao.label_tag }}
+                    {{ form.pressao }}
                 </div>
 
                 <div class="mb-3">
@@ -35,7 +39,7 @@
                     {{ form.observacoes }}
                 </div>
 
-                <button type="submit" class="btn btn-success">
+                <button class="btn btn-success">
                     Finalizar Atendimento
                 </button>
 

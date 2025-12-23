@@ -16,27 +16,23 @@
         <div class="card-body">
             <p><strong>Paciente:</strong> {{ consulta.paciente }}</p>
 
-            <form method="post">
-                {% csrf_token %}
+           <form method="post">
+    {% csrf_token %}
 
-                <div class="mb-3">
-                    {{ form.diagnostico.label_tag }}
-                    {{ form.diagnostico }}
-                </div>
+    <div class="mb-3">
+        {{ form.observacoes.label_tag }}
+        {{ form.observacoes }}
+    </div>
 
-                <div class="mb-3">
-                    {{ form.prescricao.label_tag }}
-                    {{ form.prescricao }}
-                </div>
+    <button type="submit" class="btn btn-success">
+        Finalizar Triagem
+    </button>
 
-                <div class="mb-3">
-                    {{ form.observacoes.label_tag }}
-                    {{ form.observacoes }}
-                </div>
+    <a href="{% url 'fila_espera' %}" class="btn btn-secondary">
+        Cancelar
+    </a>
+</form>
 
-                <button class="btn btn-success">Finalizar Triagem</button>
-                <a href="{% url 'fila_espera' %}" class="btn btn-secondary">Cancelar</a>
-            </form>
         </div>
     </div>
 </div>
