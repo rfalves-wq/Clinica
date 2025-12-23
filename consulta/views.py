@@ -60,6 +60,10 @@ def mudar_status(request, consulta_id, status):
 # =========================
 # ATENDIMENTO DO MÉDICO
 # =========================
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Consulta
+from triagem.forms import TriagemForm
+
 def atender_consulta(request, consulta_id):
     consulta = get_object_or_404(Consulta, id=consulta_id)
 
@@ -70,6 +74,7 @@ def atender_consulta(request, consulta_id):
             triagem.consulta = consulta
             triagem.save()
 
+            # finaliza consulta
             consulta.status = 'FINALIZADA'
             consulta.save()
 

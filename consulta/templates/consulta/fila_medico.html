@@ -11,11 +11,10 @@
         {% for consulta in consultas %}
         <tr>
             <td>{{ consulta.paciente.nome }}</td>
-            <td>
-                <a href="{% url 'iniciar_atendimento' consulta.id %}"
-                   class="btn btn-success btn-sm">
-                    Atender
-                </a>
+            <a href="{% url 'atender_consulta' consulta.id %}"
+   class="btn btn-sm btn-primary">
+    Atender
+</a>
             </td>
         </tr>
         {% empty %}

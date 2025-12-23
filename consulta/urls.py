@@ -7,4 +7,5 @@ urlpatterns = [
     path('fila-medico/', views.fila_medico, name='fila_medico'),
     path('atender/<int:consulta_id>/', views.atender_consulta, name='atender_consulta'),
     path('mudar-status/<int:consulta_id>/<str:status>/', views.mudar_status, name='mudar_status'),
+     path('atender/<int:consulta_id>/', views.atender_consulta, name='atender_consulta'),
 ]

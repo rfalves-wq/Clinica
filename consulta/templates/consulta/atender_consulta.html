@@ -9,13 +9,13 @@
 
 <div class="container mt-4">
     <div class="card shadow">
-        <div class="card-header bg-success text-white">
-            <h5>Atendimento Médico</h5>
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Atendimento Médico</h5>
         </div>
 
         <div class="card-body">
-            <p><strong>Paciente:</strong> {{ consulta.paciente.nome }}</p>
-            <p><strong>Médico:</strong> {{ consulta.medico.nome }}</p>
+            <p><strong>Paciente:</strong> {{ consulta.paciente }}</p>
+            <p><strong>Data:</strong> {{ consulta.data|date:"d/m/Y H:i" }}</p>
 
             <form method="post">
                 {% csrf_token %}
@@ -35,8 +35,13 @@
                     {{ form.observacoes }}
                 </div>
 
-                <button class="btn btn-success">Finalizar Atendimento</button>
-                <a href="{% url 'fila_espera' %}" class="btn btn-secondary">Voltar</a>
+                <button type="submit" class="btn btn-success">
+                    Finalizar Atendimento
+                </button>
+
+                <a href="{% url 'fila_medico' %}" class="btn btn-secondary">
+                    Voltar
+                </a>
             </form>
         </div>
     </div>
