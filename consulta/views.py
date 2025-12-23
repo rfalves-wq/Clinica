@@ -1,11 +1,14 @@
-from django.shortcuts import redirect, get_object_or_404
+from datetime import date
+from django.shortcuts import render, redirect, get_object_or_404
+
 from pacientes.models import Paciente
 from .models import Consulta
+from triagem.forms import TriagemForm
 
-from django.shortcuts import render, get_object_or_404, redirect
-from pacientes.models import Paciente
-from .models import Consulta
 
+# =========================
+# MARCAR CONSULTA (RECEPÇÃO)
+# =========================
 def marcar_consulta(request, paciente_id):
     paciente = get_object_or_404(Paciente, id=paciente_id)
 
@@ -20,39 +23,61 @@ def marcar_consulta(request, paciente_id):
     })
 
 
-
-from django.shortcuts import render
-from .models import Consulta
-from datetime import date
-
+# =========================
+# FILA DE TRIAGEM
+# =========================
 def fila_espera(request):
     consultas = Consulta.objects.filter(
-        data=date.today()
-    ).exclude(status='FINALIZADO').order_by('criado_em')
-
+        status='AGUARDANDO_TRIAGEM'
+    )
     return render(request, 'consulta/fila_espera.html', {
         'consultas': consultas
     })
 
-from django.shortcuts import redirect, get_object_or_404
-from .models import Consulta
 
+# =========================
+# FILA DO MÉDICO
+# =========================
+def fila_medico(request):
+    consultas = Consulta.objects.filter(
+        status='AGUARDANDO_MEDICO'
+    )
+    return render(request, 'consulta/fila_medico.html', {
+        'consultas': consultas
+    })
+
+
+# =========================
+# MUDAR STATUS (UTILITÁRIO)
+# =========================
 def mudar_status(request, consulta_id, status):
     consulta = get_object_or_404(Consulta, id=consulta_id)
     consulta.status = status
     consulta.save()
     return redirect('fila_espera')
 
-from datetime import date
-from django.shortcuts import render
-from .models import Consulta
 
-def fila_medico(request):
-    consultas = Consulta.objects.filter(
-        data=date.today(),
-        status='AGUARDANDO_MEDICO'
-    )
+# =========================
+# ATENDIMENTO DO MÉDICO
+# =========================
+def atender_consulta(request, consulta_id):
+    consulta = get_object_or_404(Consulta, id=consulta_id)
 
-    return render(request, 'consulta/fila_medico.html', {
-        'consultas': consultas
+    if request.method == 'POST':
+        form = TriagemForm(request.POST)
+        if form.is_valid():
+            triagem = form.save(commit=False)
+            triagem.consulta = consulta
+            triagem.save()
+
+            consulta.status = 'FINALIZADA'
+            consulta.save()
+
+            return redirect('fila_medico')
+    else:
+        form = TriagemForm()
+
+    return render(request, 'consulta/atender_consulta.html', {
+        'consulta': consulta,
+        'form': form
     })

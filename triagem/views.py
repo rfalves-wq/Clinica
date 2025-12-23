@@ -1,29 +1,31 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from consulta.models import Consulta
-from .models import Triagem
 from .forms import TriagemForm
 
 def realizar_triagem(request, consulta_id):
     consulta = get_object_or_404(Consulta, id=consulta_id)
 
-    triagem, criada = Triagem.objects.get_or_create(
-        consulta=consulta
-    )
-
     if request.method == 'POST':
-        form = TriagemForm(request.POST, instance=triagem)
+        form = TriagemForm(request.POST)
         if form.is_valid():
-            form.save()
+            triagem = form.save(commit=False)
+            triagem.consulta = consulta
+            triagem.save()
+
+            # 🔁 muda o status
             consulta.status = 'AGUARDANDO_MEDICO'
             consulta.save()
+
             return redirect('fila_espera')
     else:
-        form = TriagemForm(instance=triagem)
+        form = TriagemForm()
 
-    return render(request, 'triagem/realizar.html', {
-        'form': form,
-        'consulta': consulta
+    return render(request, 'triagem/realizar_triagem.html', {
+        'consulta': consulta,
+        'form': form
     })
+
 
 from datetime import date
 

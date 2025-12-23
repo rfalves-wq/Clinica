@@ -21,43 +21,33 @@
         <h2 class="mb-4">Fila de Espera</h2>
 
         <table class="table table-striped">
-            <thead class="table-dark">
-                <tr>
-                    <th>Paciente</th>
-                    <th>Status</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
+    <thead>
+        <tr>
+            <th>Paciente</th>
+            <th>Data</th>
+            <th>Ação</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for consulta in consultas %}
+        <tr>
+            <td>{{ consulta.paciente.nome }}</td>
+            <td>{{ consulta.data|date:"d/m/Y H:i" }}</td>
+            <td>
+    <a href="{% url 'realizar_triagem' consulta.id %}"
+       class="btn btn-sm btn-warning">
+        Triar
+    </a>
+</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">Nenhuma consulta na fila</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
-            <tbody>
-                {% for consulta in consultas %}
-                <tr>
-                    <td>{{ consulta.paciente.nome }}</td>
-                    <td>
-                        <span class="badge bg-info">
-                            {{ consulta.get_status_display }}
-                        </span>
-                    </td>
-                    <td>
-                        {% if consulta.status == 'AGUARDANDO' %}
-                        <a href="{% url 'realizar_triagem' consulta.id %}"
-                           class="btn btn-warning btn-sm">
-                            Fazer Triagem
-                        </a>
-                        {% endif %}
-
-                        
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="3" class="text-center text-muted">
-                        Nenhuma consulta na fila
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
 
     </div>
 

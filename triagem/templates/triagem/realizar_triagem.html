@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Triagem</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-warning">
+            <h5>Triagem do Paciente</h5>
+        </div>
+
+        <div class="card-body">
+            <p><strong>Paciente:</strong> {{ consulta.paciente }}</p>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    {{ form.diagnostico.label_tag }}
+                    {{ form.diagnostico }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.prescricao.label_tag }}
+                    {{ form.prescricao }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.observacoes.label_tag }}
+                    {{ form.observacoes }}
+                </div>
+
+                <button class="btn btn-success">Finalizar Triagem</button>
+                <a href="{% url 'fila_espera' %}" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
