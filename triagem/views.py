@@ -14,7 +14,7 @@ def realizar_triagem(request, consulta_id):
         form = TriagemForm(request.POST, instance=triagem)
         if form.is_valid():
             form.save()
-            consulta.status = 'triagem_realizada'
+            consulta.status = 'AGUARDANDO_MEDICO'
             consulta.save()
             return redirect('fila_espera')
     else:
@@ -23,4 +23,16 @@ def realizar_triagem(request, consulta_id):
     return render(request, 'triagem/realizar.html', {
         'form': form,
         'consulta': consulta
+    })
+
+from datetime import date
+
+def fila_medico(request):
+    consultas = Consulta.objects.filter(
+        data=date.today(),
+        status='AGUARDANDO_MEDICO'
+    )
+
+    return render(request, 'consulta/fila_medico.html', {
+        'consultas': consultas
     })

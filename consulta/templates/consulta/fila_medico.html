@@ -1,0 +1,27 @@
+<h3>Fila do Médico</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Paciente</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for consulta in consultas %}
+        <tr>
+            <td>{{ consulta.paciente.nome }}</td>
+            <td>
+                <a href="{% url 'iniciar_atendimento' consulta.id %}"
+                   class="btn btn-success btn-sm">
+                    Atender
+                </a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="2">Nenhum paciente aguardando médico</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

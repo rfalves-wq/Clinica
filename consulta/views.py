@@ -42,3 +42,17 @@ def mudar_status(request, consulta_id, status):
     consulta.status = status
     consulta.save()
     return redirect('fila_espera')
+
+from datetime import date
+from django.shortcuts import render
+from .models import Consulta
+
+def fila_medico(request):
+    consultas = Consulta.objects.filter(
+        data=date.today(),
+        status='AGUARDANDO_MEDICO'
+    )
+
+    return render(request, 'consulta/fila_medico.html', {
+        'consultas': consultas
+    })
