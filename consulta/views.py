@@ -73,19 +73,68 @@ from django.shortcuts import render, get_object_or_404
 from .models import Consulta
 from triagem.models import Triagem
 
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Consulta, Prescricao
+from triagem.models import Triagem
+from .forms import PrescricaoForm
+
 def atender_consulta(request, consulta_id):
     consulta = get_object_or_404(Consulta, id=consulta_id)
+    triagem = get_object_or_404(Triagem, consulta=consulta)
 
-    # tenta buscar a triagem
-    try:
-        triagem = consulta.triagem
-    except Triagem.DoesNotExist:
-        triagem = None
+    # se já existir prescrição, reutiliza
+    prescricao = getattr(consulta, 'prescricao', None)
+
+    if request.method == 'POST':
+        form = PrescricaoForm(request.POST, instance=prescricao)
+        if form.is_valid():
+            prescricao = form.save(commit=False)
+            prescricao.consulta = consulta
+            prescricao.save()
+
+            consulta.status = 'FINALIZADA'
+            consulta.save()
+
+            return redirect('fila_medico')
+    else:
+        form = PrescricaoForm(instance=prescricao)
 
     return render(request, 'consulta/atender_consulta.html', {
         'consulta': consulta,
-        'triagem': triagem
+        'triagem': triagem,
+        'form': form,   # 🔴 ISSO É O QUE FALTAVA
     })
 
 
 
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Consulta, Prescricao
+from triagem.models import Triagem
+from .forms import PrescricaoForm
+def atendimento_medico(request, consulta_id):
+    consulta = get_object_or_404(Consulta, id=consulta_id)
+    triagem = get_object_or_404(Triagem, consulta=consulta)
+
+    # Se já existir prescrição, edita; senão cria nova
+    prescricao, created = Prescricao.objects.get_or_create(
+        consulta=consulta
+    )
+
+    if request.method == 'POST':
+        form = PrescricaoForm(request.POST, instance=prescricao)
+        if form.is_valid():
+            form.save()
+
+            # muda status da consulta
+            consulta.status = 'FINALIZADA'
+            consulta.save()
+
+            return redirect('fila_medico')
+    else:
+        form = PrescricaoForm(instance=prescricao)
+
+    return render(request, 'consulta/atendimento_medico.html', {
+        'consulta': consulta,
+        'triagem': triagem,
+        'form': form
+    })

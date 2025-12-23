@@ -1,75 +1,163 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title>Atendimento Médico</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
 
-<div class="container mt-4">
-    <div class="card shadow">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f4f6f9;
+        }
+
+        .section-title {
+            border-left: 5px solid #0d6efd;
+            padding-left: 10px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container mt-5 mb-5">
+
+    <div class="card shadow-lg border-0">
+
         <div class="card-header bg-primary text-white">
-            <h5>Atendimento Médico</h5>
+            <h4 class="mb-0">🩺 Atendimento Médico</h4>
         </div>
 
         <div class="card-body">
-            <p><strong>Paciente:</strong> {{ consulta.paciente }}</p>
+
+            <!-- PACIENTE -->
+            <div class="mb-4">
+                <h5 class="section-title">Paciente</h5>
+                <p class="fs-5"><strong>{{ consulta.paciente }}</strong></p>
+            </div>
+
+            <!-- TRIAGEM -->
+            <div class="mb-4">
+                <h5 class="section-title">Dados da Triagem</h5>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="alert alert-light">
+                            <strong>Peso:</strong><br>{{ triagem.peso }} kg
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="alert alert-light">
+                            <strong>Altura:</strong><br>{{ triagem.altura }} m
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="alert alert-light">
+                            <strong>Pressão:</strong><br>{{ triagem.pressao }}
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="alert alert-light">
+                            <strong>Observações:</strong><br>{{ triagem.observacoes }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRESCRIÇÃO -->
+            <h5 class="section-title">Prescrição Médica</h5>
 
             <form method="post">
                 {% csrf_token %}
 
-                <div class="mb-3">
-                    {{ form.peso.label_tag }}
-                    {{ form.peso }}
+                <div id="medicamentos">
+
+                    <!-- MEDICAMENTO 1 -->
+                    <div class="card mb-3 medicamento-item shadow-sm">
+                        <div class="card-body">
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label class="form-label">Medicamento</label>
+                                    <input type="text" name="medicamento[]" class="form-control" required>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Dosagem</label>
+                                    <input type="text" name="dosagem[]" class="form-control" required>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Orientações</label>
+                                    <input type="text" name="orientacoes[]" class="form-control" required>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
                 </div>
 
-                <div class="mb-3">
-                    {{ form.altura.label_tag }}
-                    {{ form.altura }}
+                <!-- BOTÕES -->
+                <div class="d-flex justify-content-between mt-4">
+                    <button type="button" class="btn btn-outline-primary" onclick="adicionarMedicamento()">
+                        ➕ Adicionar Medicamento
+                    </button>
+
+                    <div>
+                        <a href="{% url 'fila_medico' %}" class="btn btn-secondary">
+                            Voltar
+                        </a>
+
+                        <button type="submit" class="btn btn-success ms-2">
+                            ✅ Finalizar Atendimento
+                        </button>
+                    </div>
                 </div>
 
-                <div class="mb-3">
-                    {{ form.pressao.label_tag }}
-                    {{ form.pressao }}
-                </div>
-
-                <div class="mb-3">
-                    {{ form.observacoes.label_tag }}
-                    {{ form.observacoes }}
-                </div>
-<h2>Atendimento Médico</h2>
-
-<p><strong>Paciente:</strong> {{ consulta.paciente }}</p>
-
-<hr>
-
-{% if triagem %}
-    <h3>Dados da Triagem</h3>
-
-    <ul>
-        <li><strong>Peso:</strong> {{ triagem.peso }} kg</li>
-        <li><strong>Altura:</strong> {{ triagem.altura }} m</li>
-        <li><strong>Pressão:</strong> {{ triagem.pressao }}</li>
-        <li><strong>Observações:</strong> {{ triagem.observacoes }}</li>
-    </ul>
-{% else %}
-    <p style="color:red;">
-        Triagem ainda não realizada.
-    </p>
-{% endif %}
-
-                <button class="btn btn-success">
-                    Finalizar Atendimento
-                </button>
-
-                <a href="{% url 'fila_medico' %}" class="btn btn-secondary">
-                    Voltar
-                </a>
             </form>
+
         </div>
     </div>
 </div>
+
+<script>
+    function adicionarMedicamento() {
+        const container = document.getElementById('medicamentos');
+
+        const html = `
+        <div class="card mb-3 medicamento-item shadow-sm">
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="form-label">Medicamento</label>
+                        <input type="text" name="medicamento[]" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Dosagem</label>
+                        <input type="text" name="dosagem[]" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">Orientações</label>
+                        <input type="text" name="orientacoes[]" class="form-control" required>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        `;
+
+        container.insertAdjacentHTML('beforeend', html);
+    }
+</script>
 
 </body>
 </html>

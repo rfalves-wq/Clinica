@@ -21,3 +21,22 @@ class Consulta(models.Model):
 
     def __str__(self):
         return f"{self.paciente} - {self.status}"
+
+from django.db import models
+from .models import Consulta  # se estiver no mesmo app, ajuste se necessário
+
+class Prescricao(models.Model):
+    consulta = models.OneToOneField(
+        Consulta,
+        on_delete=models.CASCADE,
+        related_name='prescricao'
+    )
+
+    medicamento = models.CharField(max_length=100)
+    dosagem = models.CharField(max_length=100)
+    orientacoes = models.TextField()
+
+    def __str__(self):
+        return f"Prescrição - {self.consulta}"
+
+
