@@ -12,8 +12,6 @@
     --primary: #2f80ed;
     --primary-dark: #1c5fb8;
     --bg-light: #f4f6f9;
-    --bg-dark: #121212;
-    --card-dark: #1e1e1e;
 }
 
 body {
@@ -22,6 +20,7 @@ body {
     background: var(--bg-light);
 }
 
+/* SIDEBAR */
 .sidebar {
     width: 230px;
     height: 100vh;
@@ -56,6 +55,7 @@ body {
     background-color: rgba(255,255,255,0.08);
 }
 
+/* MAIN */
 .main-content {
     margin-left: 230px;
     min-height: 100vh;
@@ -80,6 +80,10 @@ body {
 
     <a href="{% url 'fila_espera' %}">
         <i class="bi bi-clipboard2-pulse-fill me-2"></i> Triagem
+    </a>
+
+    <a href="{% url 'fila_medico' %}">
+        <i class="bi bi-person-lines-fill me-2"></i> Fila do Médico
     </a>
 
     <a data-bs-toggle="collapse" href="#menuCadastrar">
@@ -142,35 +146,58 @@ body {
 
         <div class="row g-4">
 
+            <!-- USUÁRIOS -->
             <div class="col-md-3">
                 <div class="card text-center p-4">
-                    <i class="bi bi-people-fill fs-1"></i>
+                    <i class="bi bi-people-fill fs-1 text-primary"></i>
                     <h6>Usuários</h6>
-                    <a href="{% url 'usuario_list' %}" class="btn btn-outline-primary btn-sm">Gerenciar</a>
+                    <a href="{% url 'usuario_list' %}" class="btn btn-outline-primary btn-sm">
+                        Gerenciar
+                    </a>
                 </div>
             </div>
 
+            <!-- ENFERMEIROS -->
             <div class="col-md-3">
                 <div class="card text-center p-4">
-                    <i class="bi bi-heart-pulse-fill fs-1"></i>
+                    <i class="bi bi-heart-pulse-fill fs-1 text-primary"></i>
                     <h6>Enfermeiros</h6>
-                    <a href="{% url 'enfermeiro_list' %}" class="btn btn-outline-primary btn-sm">Gerenciar</a>
+                    <a href="{% url 'enfermeiro_list' %}" class="btn btn-outline-primary btn-sm">
+                        Gerenciar
+                    </a>
                 </div>
             </div>
 
+            <!-- MÉDICOS -->
             <div class="col-md-3">
                 <div class="card text-center p-4">
-                    <i class="bi bi-person-badge-fill fs-1"></i>
+                    <i class="bi bi-person-badge-fill fs-1 text-primary"></i>
                     <h6>Médicos</h6>
-                    <a href="{% url 'medico_list' %}" class="btn btn-outline-primary btn-sm">Gerenciar</a>
+                    <a href="{% url 'medico_list' %}" class="btn btn-outline-primary btn-sm">
+                        Gerenciar
+                    </a>
                 </div>
             </div>
 
+            <!-- PACIENTES -->
             <div class="col-md-3">
                 <div class="card text-center p-4">
-                    <i class="bi bi-person-heart fs-1"></i>
+                    <i class="bi bi-person-heart fs-1 text-primary"></i>
                     <h6>Pacientes</h6>
-                    <a href="{% url 'listar_pacientes' %}" class="btn btn-outline-primary btn-sm">Gerenciar</a>
+                    <a href="{% url 'listar_pacientes' %}" class="btn btn-outline-primary btn-sm">
+                        Gerenciar
+                    </a>
+                </div>
+            </div>
+
+            <!-- FILA DO MÉDICO -->
+            <div class="col-md-3">
+                <div class="card text-center p-4">
+                    <i class="bi bi-person-lines-fill fs-1 text-primary"></i>
+                    <h6>Fila do Médico</h6>
+                    <a href="{% url 'fila_medico' %}" class="btn btn-outline-primary btn-sm">
+                        Acessar
+                    </a>
                 </div>
             </div>
 
