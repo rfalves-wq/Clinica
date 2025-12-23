@@ -4,4 +4,10 @@ from .models import Triagem
 class TriagemForm(forms.ModelForm):
     class Meta:
         model = Triagem
-        fields = ['enfermeiro', 'pressao', 'temperatura', 'observacoes']
+        fields = [
+            'enfermeiro',
+            'peso',
+            'altura',
+            'pressao',
+            'observacoes'
+        ]

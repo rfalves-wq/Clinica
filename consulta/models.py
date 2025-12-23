@@ -1,5 +1,5 @@
 from django.db import models
-
+from medico.models import Medico
 class Consulta(models.Model):
 
     STATUS_CHOICES = [
@@ -19,7 +19,7 @@ class Consulta(models.Model):
         choices=STATUS_CHOICES,
         default='AGUARDANDO'
     )
-
+    medico = models.ForeignKey(Medico, on_delete=models.SET_NULL, null=True, blank=True)
     data = models.DateField(auto_now_add=True)
     criado_em = models.DateTimeField(auto_now_add=True)
 

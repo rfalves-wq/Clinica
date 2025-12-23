@@ -1,9 +1,11 @@
-<h3>Triagem - {{ consulta.paciente.nome }}</h3>
+<h3>Triagem – {{ consulta.paciente.nome }}</h3>
 
 <form method="post">
     {% csrf_token %}
+
     {{ form.as_p }}
 
-    <button class="btn btn-success">Salvar Triagem</button>
-    <a href="{% url 'fila_espera' %}" class="btn btn-secondary">Voltar</a>
+    <button type="submit" class="btn btn-primary">
+        Encaminhar para Médico
+    </button>
 </form>
