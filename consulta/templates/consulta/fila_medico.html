@@ -1,23 +1,74 @@
-<table class="table">
-    <thead>
-        <tr>
-            <th>Paciente</th>
-            <th class="text-end">Ações</th>
-        </tr>
-    </thead>
+<!-- Bootstrap CSS (UMA VEZ no template/base.html) -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
-    <tbody id="fila-medico-body">
-        {% include 'consulta/fila_medico_partial.html' %}
-    </tbody>
-</table>
+<div class="card shadow-sm border-0">
+    <!-- Cabeçalho -->
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">
+            <i class="bi bi-clipboard2-pulse me-2"></i>
+            Fila do Médico
+        </h5>
+
+        <small id="status-atualizacao" class="text-white-50">
+            Atualizado agora
+        </small>
+    </div>
+
+    <!-- Corpo -->
+    <div class="card-body p-0">
+
+        <!-- Spinner -->
+        <div id="loading" class="text-center py-2 text-muted d-none">
+            <div class="spinner-border spinner-border-sm me-2"></div>
+            Atualizando fila…
+        </div>
+
+        <!-- Tabela -->
+        <div class="table-responsive">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Paciente</th>
+                        <th class="text-end">Ações</th>
+                    </tr>
+                </thead>
+
+                <!-- 🔥 ATUALIZA SOMENTE O TBODY -->
+                <tbody id="fila-medico-body">
+                    {% include 'consulta/fila_medico_partial.html' %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
+let conteudoAnterior = "";
+
 function atualizarFila() {
+    const loading = document.getElementById("loading");
+    loading.classList.remove("d-none");
+
     fetch("{% url 'fila_medico_partial' %}")
         .then(response => response.text())
         .then(html => {
-            document.getElementById("fila-medico-body").innerHTML = html;
+            if (html !== conteudoAnterior) {
+                document.getElementById("fila-medico-body").innerHTML = html;
+                conteudoAnterior = html;
+
+                document.getElementById("status-atualizacao").innerText =
+                    "Atualizado às " + new Date().toLocaleTimeString();
+            }
+        })
+        .finally(() => {
+            loading.classList.add("d-none");
         });
 }
 
-setInterval(atualizarFila, 5000); // a cada 5 segundos
+// Atualiza a cada 5 segundos
+setInterval(atualizarFila, 5000);
 </script>
