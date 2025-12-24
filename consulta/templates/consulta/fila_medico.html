@@ -1,27 +1,58 @@
-<h3>Fila do Médico</h3>
+<!-- Bootstrap CSS (UMA VEZ, no topo do template ou base.html) -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Paciente</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for consulta in consultas %}
-        <tr>
-            <td>{{ consulta.paciente.nome }}</td>
-            <a href="{% url 'atender_consulta' consulta.id %}"
-   class="btn btn-sm btn-primary">
-    Atender
-</a>
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">
+            <i class="bi bi-clipboard2-pulse me-2"></i>
+            Fila do Médico
+        </h5>
+    </div>
 
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="2">Nenhum paciente aguardando médico</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0 align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Paciente</th>
+                    <th class="text-end">Ações</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for consulta in consultas %}
+                <tr>
+                    <td>
+                        <div class="fw-semibold">
+                            <i class="bi bi-person-circle text-primary me-1"></i>
+                            {{ consulta.paciente.nome }}
+                        </div>
+                        <small class="text-muted">
+                            Nº da consulta: {{ consulta.id }}
+                        </small>
+                    </td>
+
+                    <td class="text-end">
+                        <a href="{% url 'atender_consulta' consulta.id %}"
+                           class="btn btn-sm btn-success px-3">
+                            <i class="bi bi-heart-pulse me-1"></i>
+                            Atender
+                        </a>
+                    </td>
+                </tr>
+
+                {% empty %}
+                <tr>
+                    <td colspan="2" class="text-center py-4 text-muted">
+                        <i class="bi bi-inbox fs-4 d-block mb-2"></i>
+                        Nenhum paciente aguardando atendimento
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Bootstrap JS (UMA VEZ, no final da página) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
