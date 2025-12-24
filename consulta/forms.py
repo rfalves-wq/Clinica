@@ -4,4 +4,10 @@ from .models import Prescricao
 class PrescricaoForm(forms.ModelForm):
     class Meta:
         model = Prescricao
-        fields = ['medicamento', 'dosagem', 'orientacoes']
+        fields = ['medicamentos']
+
+    medicamentos = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 4}),
+        required=False,
+        label="Medicamentos prescritos"
+    )
