@@ -39,9 +39,7 @@ def fila_espera(request):
 # FILA DO MÉDICO
 # =========================
 def fila_medico(request):
-    consultas = Consulta.objects.filter(
-        status='AGUARDANDO_MEDICO'
-    )
+    consultas = Consulta.objects.filter(status='AGUARDANDO_MEDICO')
     return render(request, 'consulta/fila_medico.html', {
         'consultas': consultas
     })
@@ -139,11 +137,8 @@ def atendimento_medico(request, consulta_id):
         'form': form
     })
 
-from django.shortcuts import render
-from .models import Consulta
-
 def fila_medico_partial(request):
-    consultas = Consulta.objects.filter(status='aguardando_medico')
+    consultas = Consulta.objects.filter(status='AGUARDANDO_MEDICO')
     return render(request, 'consulta/fila_medico_partial.html', {
         'consultas': consultas
     })

@@ -8,6 +8,5 @@ urlpatterns = [
     path('atender/<int:consulta_id>/', views.atender_consulta, name='atender_consulta'),
     path('mudar-status/<int:consulta_id>/<str:status>/', views.mudar_status, name='mudar_status'),
      path('atender/<int:consulta_id>/', views.atender_consulta, name='atender_consulta'),
-     path('fila-medico/atualizar/', views.fila_medico_partial, name='fila_medico_partial'),
-
+      path('fila-medico/atualizar/', views.fila_medico_partial, name='fila_medico_partial'),
 ]

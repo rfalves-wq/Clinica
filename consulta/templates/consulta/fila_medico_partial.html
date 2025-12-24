@@ -1,0 +1,22 @@
+{% for consulta in consultas %}
+<tr>
+    <td>
+        {{ consulta.paciente.nome }} <br>
+        <small class="text-muted">
+            Consulta #{{ consulta.id }}
+        </small>
+    </td>
+    <td class="text-end">
+        <a href="{% url 'atender_consulta' consulta.id %}"
+           class="btn btn-sm btn-primary">
+            Atender
+        </a>
+    </td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="2" class="text-center text-muted">
+        Nenhum paciente aguardando médico
+    </td>
+</tr>
+{% endfor %}
